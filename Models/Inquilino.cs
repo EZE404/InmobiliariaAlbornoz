@@ -19,6 +19,6 @@ namespace InmobiliariaAlbornoz.Models
         public string DniGarante { get; set; }
         public string NombreGarante { get; set; }
         public string TelefonoGarante { get; set; }
-        public int EmailGarante { get; set; }
+        public string EmailGarante { get; set; }
     }
 }

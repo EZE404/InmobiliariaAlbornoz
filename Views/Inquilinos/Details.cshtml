@@ -1,13 +1,13 @@
-﻿@model InmobiliariaAlbornoz.Models.Propietario
+﻿@model InmobiliariaAlbornoz.Models.Inquilino
 
 @{
-    ViewData["Title"] = "Detalles";
+    ViewData["Title"] = "Detalles Inquilino";
 }
 
 <h1>Detalles</h1>
 
 <div>
-    <h4>Propietario</h4>
+    <h4>Inquilino</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-4">
@@ -35,10 +35,10 @@
             @Html.DisplayFor(model => model.FechaN)
         </dd>
         <dt class = "col-sm-4">
-            Domicilio
+            Dirección de Trabajo
         </dt>
         <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.Direccion)
+            @Html.DisplayFor(model => model.DireccionTrabajo)
         </dd>
         <dt class = "col-sm-4">
             Teléfono
@@ -51,6 +51,30 @@
         </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-4">
+            Dni del Garante
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.DniGarante)
+        </dd>
+        <dt class = "col-sm-4">
+            Nombre del Garante
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.NombreGarante)
+        </dd>
+        <dt class = "col-sm-4">
+            Tel. del Garante
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.TelefonoGarante)
+        </dd>
+        <dt class = "col-sm-4">
+            Email del Garante
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.EmailGarante)
         </dd>
     </dl>
 </div>
