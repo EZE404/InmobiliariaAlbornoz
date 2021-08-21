@@ -21,8 +21,8 @@ namespace InmobiliariaAlbornoz.Models
             int res = -1;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"UPDATE Propietarios SET Nombre = @nombre , Dni = @dni , FechaN = @fecha_n 
-                                Domicilio = @domicilio , Email = @email , Telefono = @telefono WHERE id = @id ;";
+                string sql = @"UPDATE Propietario SET Nombre = @nombre , Dni = @dni , FechaN = @fecha_n , 
+                            Domicilio = @domicilio , Email = @email , Telefono = @telefono WHERE id = @id ;";
 
                 using (SqlCommand comm = new SqlCommand(sql, conn))
                 {
@@ -46,7 +46,7 @@ namespace InmobiliariaAlbornoz.Models
             int res = -1;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"DELETE FROM Propietarios WHERE Id = @id ;";
+                string sql = @"DELETE FROM Propietario WHERE Id = @id ;";
 
                 using (SqlCommand comm = new SqlCommand(sql, conn))
                 {
@@ -64,7 +64,7 @@ namespace InmobiliariaAlbornoz.Models
             Propietario p = new Propietario();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietarios 
+                string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietario 
                                 WHERE Id = @id ;";
 
                 using (SqlCommand comm = new SqlCommand(sql, conn))
@@ -96,7 +96,7 @@ namespace InmobiliariaAlbornoz.Models
             int res = -1;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"INSERT INTO Propietarios (Nombre, Dni, FechaN, Domicilio, Email, Telefono) 
+                string sql = @"INSERT INTO Propietario (Nombre, Dni, FechaN, Domicilio, Email, Telefono) 
                             VALUES(@nombre, @dni, @fecha_n, @domicilio, @email, @telefono);
                             SELECT SCOPE_IDENTITY();";
 
@@ -126,7 +126,7 @@ namespace InmobiliariaAlbornoz.Models
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietarios;";
+                string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietario;";
 
                 using (SqlCommand comm = new SqlCommand(sql, conn))
                 {
