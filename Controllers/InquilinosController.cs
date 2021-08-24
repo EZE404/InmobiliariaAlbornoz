@@ -64,7 +64,8 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: InquilinosController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var i = repo.ById(id);
+            return View(i);
         }
 
         // POST: InquilinosController/Edit/5

@@ -173,5 +173,45 @@ namespace InmobiliariaAlbornoz.Models
             }
             return list;
         }
+        public Inquilino ById(int id) {
+
+            Inquilino i = new Inquilino();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT Id, Dni, Nombre, FechaN, DomicilioTrabajo, Telefono, Email, 
+                                DniGarante, NombreGarante, TelefonoGarante, EmailGarante 
+                                FROM Inquilino WHERE Id = @id ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    
+                    conn.Open();
+                    
+                    var reader = comm.ExecuteReader();
+                    
+                    if (reader.Read()) {
+
+                        i.Id = reader.GetInt32(0);
+                        i.Dni = reader.GetString(1);
+                        i.Nombre = reader.GetString(2);
+                        i.FechaN = reader.GetDateTime(3);
+                        i.DireccionTrabajo = reader.GetString(4);
+                        i.Telefono = reader.GetString(5);
+                        i.Email = reader.GetString(6);
+
+                        i.DniGarante = reader.GetString(7);
+                        i.NombreGarante = reader.GetString(8);
+                        i.TelefonoGarante = reader.GetString(9);
+                        i.EmailGarante = reader.GetString(10);
+                    }
+                    
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
     }
 }
