@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace InmobiliariaAlbornoz.Models
 {
     public class RepoPropietario
     {
         //string connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\\Users\\Ezequiel\\OneDrive\\ULP\\4to Cuatrimestre\\Programación .NET\\segunda_clase\\WebApplication1\\Data\\WebApp1.mdf";
-        string connectionString = "Server=(localdb)\\mssqllocaldb;Database=InmobiliariaAlbornoz;Trusted_Connection=True;MultipleActiveResultSets=true";
-        //string conString = Configuration.getStringConnection("database");
+        string connectionString = "server=localhost;user=root;password=;database=inmobiliaria;SslMode=none";
         public RepoPropietario()
         {
 
@@ -19,12 +16,12 @@ namespace InmobiliariaAlbornoz.Models
         public int Edit(Propietario p)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"UPDATE Propietario SET Nombre = @nombre , Dni = @dni , FechaN = @fecha_n , 
                             Domicilio = @domicilio , Email = @email , Telefono = @telefono WHERE id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@nombre", p.Nombre);
                     comm.Parameters.AddWithValue("@dni", p.Dni);
@@ -44,11 +41,11 @@ namespace InmobiliariaAlbornoz.Models
         public int Delete(int id)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"DELETE FROM Propietario WHERE Id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@id", id);
                     conn.Open();
@@ -62,12 +59,12 @@ namespace InmobiliariaAlbornoz.Models
         public Propietario Details(int id)
         {
             Propietario p = new Propietario();
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietario 
                                 WHERE Id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@id", id);
 
@@ -94,13 +91,13 @@ namespace InmobiliariaAlbornoz.Models
         public int Put(Propietario p)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"INSERT INTO Propietario (Nombre, Dni, FechaN, Domicilio, Email, Telefono) 
                             VALUES(@nombre, @dni, @fecha_n, @domicilio, @email, @telefono);
-                            SELECT SCOPE_IDENTITY();";
+                            SELECT last_insert_id();";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@nombre", p.Nombre);
                     comm.Parameters.AddWithValue("@dni", p.Dni);
@@ -124,11 +121,11 @@ namespace InmobiliariaAlbornoz.Models
         {
             IList<Propietario> list = new List<Propietario>();
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT Id, Nombre, Dni, FechaN, Domicilio, Email, Telefono FROM Propietario;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     conn.Open();
                     var reader = comm.ExecuteReader();

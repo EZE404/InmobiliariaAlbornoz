@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace InmobiliariaAlbornoz.Models
 {
     public class RepoInquilino
     {
         //string connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\\Users\\Ezequiel\\OneDrive\\ULP\\4to Cuatrimestre\\Programación .NET\\segunda_clase\\WebApplication1\\Data\\WebApp1.mdf";
-        string connectionString = "Server=(localdb)\\mssqllocaldb;Database=InmobiliariaAlbornoz;Trusted_Connection=True;MultipleActiveResultSets=true";
-        //string conString = Configuration.getStringConnection("database");
+        string connectionString = "server=localhost;user=root;password=;database=inmobiliaria;SslMode=none";
+
         public RepoInquilino()
         {
 
@@ -19,7 +17,7 @@ namespace InmobiliariaAlbornoz.Models
         public int Edit(Inquilino p)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"UPDATE Inquilino SET Nombre = @nombre , Dni = @dni , FechaN = @fecha_n , 
                             DomicilioTrabajo = @domicilio , Email = @email , Telefono = @telefono, 
@@ -27,7 +25,7 @@ namespace InmobiliariaAlbornoz.Models
                             TelefonoGarante = @tel_garante, EmailGarante = @email_garante 
                             WHERE id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@nombre", p.Nombre);
                     comm.Parameters.AddWithValue("@dni", p.Dni);
@@ -51,11 +49,11 @@ namespace InmobiliariaAlbornoz.Models
         public int Delete(int id)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"DELETE FROM Inquilino WHERE Id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@id", id);
                     conn.Open();
@@ -69,13 +67,13 @@ namespace InmobiliariaAlbornoz.Models
         public Inquilino Details(int id)
         {
             Inquilino p = new Inquilino();
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
                                 DniGarante, NombreGarante, TelefonoGarante, EmailGarante 
                                 FROM Inquilino WHERE Id = @id ;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@id", id);
 
@@ -106,15 +104,15 @@ namespace InmobiliariaAlbornoz.Models
         public int Put(Inquilino p)
         {
             int res = -1;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"INSERT INTO Inquilino (Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
                             DniGarante, NombreGarante, TelefonoGarante, EmailGarante) 
                             VALUES(@nombre, @dni, @fecha_n, @domicilio, @email, @telefono, 
                             @dni_garante, @nombre_garante, @tel_garante, @email_garante);
-                            SELECT SCOPE_IDENTITY();";
+                            SELECT last_insert_id();";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@nombre", p.Nombre);
                     comm.Parameters.AddWithValue("@dni", p.Dni);
@@ -142,12 +140,12 @@ namespace InmobiliariaAlbornoz.Models
         {
             IList<Inquilino> list = new List<Inquilino>();
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
                            NombreGarante, DniGarante, TelefonoGarante, EmailGarante FROM Inquilino;";
 
-                using (SqlCommand comm = new SqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     conn.Open();
                     var reader = comm.ExecuteReader();
