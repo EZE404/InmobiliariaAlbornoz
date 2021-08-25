@@ -7,9 +7,9 @@
 <h1>Propietarios</h1>
 
 <p>
-    <a asp-action="Create">Cargar Nuevo</a>
+    <a asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<table class="table" id="table_id">
     <thead>
         <tr>
             <th>
@@ -37,9 +37,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+                <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+                <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
+                <i class="fas fa-trash-alt"></i> @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
             </td>
         </tr>
 }
