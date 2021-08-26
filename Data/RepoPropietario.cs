@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using InmobiliariaAlbornoz.Models;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace InmobiliariaAlbornoz.Data
@@ -9,7 +10,7 @@ namespace InmobiliariaAlbornoz.Data
     {
         //string connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\\Users\\Ezequiel\\OneDrive\\ULP\\4to Cuatrimestre\\Programación .NET\\segunda_clase\\WebApplication1\\Data\\WebApp1.mdf";
         //string connectionString = "server=localhost;user=root;password=;database=inmobiliaria;SslMode=none";
-        public RepoPropietario()
+        public RepoPropietario(IConfiguration configuration) : base(configuration)
         {
 
         }

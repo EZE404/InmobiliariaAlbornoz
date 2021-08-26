@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using InmobiliariaAlbornoz.Models;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace InmobiliariaAlbornoz.Data
 {
     public class RepoInmueble : RepoBase
     {
-        public RepoInmueble()
+        public RepoInmueble(IConfiguration configuration) : base(configuration)
         {
         }
         public int Edit(Inmueble i)

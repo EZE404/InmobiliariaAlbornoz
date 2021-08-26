@@ -7,12 +7,19 @@ using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace InmobiliariaAlbornoz.Controllers
 {
     public class InmueblesController : Controller
     {
-        private RepoInmueble repo = new RepoInmueble();
+        private RepoInmueble repo;
+
+        public InmueblesController(IConfiguration config)
+        {
+            this.repo = new RepoInmueble(config);
+        }
+
         // GET: Inmueble
         public ActionResult Index()
         {

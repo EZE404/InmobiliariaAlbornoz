@@ -1,11 +1,14 @@
+using Microsoft.Extensions.Configuration;
+
 namespace InmobiliariaAlbornoz.Data
 {
     public abstract class RepoBase
     {
         protected readonly string connectionString;
-        protected RepoBase()
+        protected RepoBase(IConfiguration configuration)
         {
-            connectionString = "server=localhost;user=root;password=;database=inmobiliaria;SslMode=none";
+            connectionString = configuration["ConnectionStrings:databaseMySql"];
+            //connectionString = "server=localhost;user=root;password=;database=inmobiliaria;SslMode=none";
         }
     }
 }

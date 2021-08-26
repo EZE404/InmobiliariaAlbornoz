@@ -2,6 +2,7 @@
 using InmobiliariaAlbornoz.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace InmobiliariaAlbornoz.Controllers
     {
         RepoPropietario repo;
 
-        public PropietariosController()
+        public PropietariosController(IConfiguration config)
         {
-            repo = new RepoPropietario();
+            repo = new RepoPropietario(config);
         }
 
         // GET: PropietariosController
