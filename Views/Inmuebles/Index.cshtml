@@ -1,0 +1,77 @@
+@model IEnumerable<InmobiliariaAlbornoz.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Lista de Inmuebles";
+}
+
+<h1>Inmuebles</h1>
+
+<p>
+    <a asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Uso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ambientes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPropietario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ambientes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disponible)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPropietario)
+            </td>
+            <td>
+                @Html.ActionLink("", "Edit", new { id=item.Id }, new {@class="fas fa-user-edit", title="Editar", style="color: blue;"}) |
+                @Html.ActionLink("", "Details", new { id=item.Id }, new {@class="fas fa-user-circle", title="Detalles", style="color: green;"}) |
+                @Html.ActionLink("", "Delete", new { id=item.Id }, new {@class="fas fa-trash-alt", title="Eliminar", style="color:red;"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

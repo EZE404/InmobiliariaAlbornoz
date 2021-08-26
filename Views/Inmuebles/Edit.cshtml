@@ -1,0 +1,60 @@
+@model InmobiliariaAlbornoz.Models.Inmueble
+
+@{
+    ViewData["Title"] = "Editar Inmueble";
+}
+
+<h1>Editar</h1>
+
+<h4>Inmueble</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Uso" class="control-label"></label>
+                <input asp-for="Uso" class="form-control" />
+                <span asp-validation-for="Uso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ambientes" class="control-label"></label>
+                <input asp-for="Ambientes" class="form-control" />
+                <span asp-validation-for="Ambientes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Disponible" /> @Html.DisplayNameFor(model => model.Disponible)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPropietario" class="control-label"></label>
+                <input asp-for="IdPropietario" class="form-control" />
+                <span asp-validation-for="IdPropietario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la Lista</a>
+</div>
+

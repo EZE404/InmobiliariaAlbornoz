@@ -1,4 +1,5 @@
-﻿using InmobiliariaAlbornoz.Models;
+﻿using InmobiliariaAlbornoz.Data;
+using InmobiliariaAlbornoz.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
