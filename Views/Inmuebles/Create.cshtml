@@ -4,6 +4,12 @@
     ViewData["Title"] = "Cargar Inmueble";
 }
 
+@if (TempData["Error"] != null)
+{
+    <h1>ERROR</h1>
+    <p class="alert-warning">@TempData["Error"]</p>
+}
+
 <h1>Cargar</h1>
 
 <h4>Inmueble</h4>
@@ -44,7 +50,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdPropietario" class="control-label"></label>
-                <input asp-for="IdPropietario" class="form-control" />
+                <select class="form-control" name="IdPropietario">
+                    @foreach (var p in (IList<Propietario>)ViewBag.Propietarios)
+                    {
+                        <option value="@p.Id">
+                            @p.Nombre
+                        </option>
+                    }
+                </select>
                 <span asp-validation-for="IdPropietario" class="text-danger"></span>
             </div>
             <div class="form-group">

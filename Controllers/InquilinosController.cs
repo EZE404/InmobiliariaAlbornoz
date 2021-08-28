@@ -84,12 +84,6 @@ namespace InmobiliariaAlbornoz.Controllers
             i.Email = collection["Email"].ToString();
             i.Telefono = collection["Telefono"].ToString();
 
-            // Datos Garante
-            i.DniGarante = collection["DniGarante"].ToString();
-            i.NombreGarante = collection["NombreGarante"].ToString();
-            i.TelefonoGarante = collection["TelefonoGarante"].ToString();
-            i.EmailGarante = collection["EmailGarante"].ToString();
-
             try
             {
                 int res = repo.Edit(i);

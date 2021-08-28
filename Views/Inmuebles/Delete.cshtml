@@ -1,68 +1,68 @@
-@model InmobiliariaAlbornoz.Models.Inmueble
+﻿@model InmobiliariaAlbornoz.Models.Inmueble
 
 @{
-    ViewData["Title"] = "Detalles de Inmueble";
+    ViewData["Title"] = "Borrar Inmueble";
 }
 
-<h1>Detalles</h1>
+<h1>Borrar</h1>
 
+<h3>¿Seguro que desea borrar este Inmueble?</h3>
 <div>
     <h4>Inmueble</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Id)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Direccion)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Direccion)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Tipo)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Tipo)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Uso)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Uso)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Ambientes)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Ambientes)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Precio)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Precio)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Disponible)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Disponible)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Propietario)
         </dt>
-        <dd class = "col-sm-8">
-            <a asp-action="Details" asp-controller="Propietarios" asp-route-id="@Model.Propietario.Id">
-                @Html.DisplayFor(model => model.Propietario.Nombre)
-            </a>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Propietario.Nombre)
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Volver a la Lista</a>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Borrar" class="btn btn-danger" /> |
+        <a asp-action="Index">Volver a la Lista</a>
+    </form>
 </div>

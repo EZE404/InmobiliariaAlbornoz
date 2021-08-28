@@ -14,17 +14,27 @@ namespace InmobiliariaAlbornoz.Controllers
     public class InmueblesController : Controller
     {
         private RepoInmueble repo;
+        private RepoPropietario repoPropietario;
 
         public InmueblesController(IConfiguration config)
         {
             this.repo = new RepoInmueble(config);
+            this.repoPropietario = new RepoPropietario(config);
         }
 
         // GET: Inmueble
         public ActionResult Index()
         {
-            var lista = repo.All();
-            return View(lista);
+            try
+            {
+                var lista = repo.All();
+                return View(lista);
+            }
+            catch (Exception e)
+            {
+                ViewData["Error"] = "Hubo un error al solicitar la lista de inmuebles: " + e.Message;
+                return View();
+            }
         }
 
         // GET: Inmueble/Details/5
@@ -46,6 +56,7 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: Inmueble/Create
         public ActionResult Create()
         {
+            ViewBag.Propietarios = repoPropietario.All();
             return View();
         }
 
@@ -56,13 +67,22 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
                 var res = repo.Put(i);
-                return RedirectToAction(nameof(Index));
+                if (res > 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    Exception e = new Exception("No se cargó el inmueble. Intente de nuevo");
+                    throw e;
+                }
+
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                TempData["Error"] = e.Message;
+                return RedirectToAction(nameof(Create));
             }
         }
 
@@ -71,6 +91,8 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
+                var propietarios = repoPropietario.All();
+                ViewBag.Propietarios = propietarios;
                 var i = repo.ById(id);
                 return View(i);            
             }
@@ -105,7 +127,8 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: Inmueble/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var i = repo.ById(id);
+            return View(i);
         }
 
         // POST: Inmueble/Delete/5
@@ -116,12 +139,24 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 // TODO: Add delete logic here
+                var res = repo.Delete(id);
+                if (res > 0)
+                {
+                    return RedirectToAction(nameof(Index));
 
-                return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    Exception e = new Exception("Ocurrió un error al eliminar el registro. Intente nuevamente.");
+                    throw e;
+                }
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                // CONSULTAR CÓMO HACER RECURSIVIDAD CON LA MISMA VISTA Y PASAR LOS PARÁMETROS QUE ESPERA
+                ViewData["Error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+
             }
         }
     }

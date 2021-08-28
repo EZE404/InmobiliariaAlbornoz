@@ -22,9 +22,7 @@ namespace InmobiliariaAlbornoz.Data
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"UPDATE Inquilino SET Nombre = @nombre , Dni = @dni , FechaN = @fecha_n , 
-                            DomicilioTrabajo = @domicilio , Email = @email , Telefono = @telefono, 
-                            DniGarante = @dni_garante, NombreGarante = @nombre_garante, 
-                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante 
+                            DomicilioTrabajo = @domicilio , Email = @email , Telefono = @telefono 
                             WHERE id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -35,10 +33,6 @@ namespace InmobiliariaAlbornoz.Data
                     comm.Parameters.AddWithValue("@domicilio", p.DireccionTrabajo);
                     comm.Parameters.AddWithValue("@email", p.Email);
                     comm.Parameters.AddWithValue("@telefono", p.Telefono);
-                    comm.Parameters.AddWithValue("@dni_garante", p.DniGarante);
-                    comm.Parameters.AddWithValue("@nombre_garante", p.NombreGarante);
-                    comm.Parameters.AddWithValue("@tel_garante", p.TelefonoGarante);
-                    comm.Parameters.AddWithValue("@email_garante", p.EmailGarante);
                     comm.Parameters.AddWithValue("@id", p.Id);
                     conn.Open();
                     res = Convert.ToInt32(comm.ExecuteNonQuery());
@@ -71,8 +65,7 @@ namespace InmobiliariaAlbornoz.Data
             Inquilino p = new Inquilino();
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
-                                DniGarante, NombreGarante, TelefonoGarante, EmailGarante 
+                string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono 
                                 FROM Inquilino WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -91,10 +84,6 @@ namespace InmobiliariaAlbornoz.Data
                         p.DireccionTrabajo = reader.GetString(4);
                         p.Email = reader.GetString(5);
                         p.Telefono = reader.GetString(6);
-                        p.DniGarante = reader.GetString(7);
-                        p.NombreGarante = reader.GetString(8);
-                        p.TelefonoGarante = reader.GetString(9);
-                        p.EmailGarante = reader.GetString(10);
                     }
 
                     conn.Close();
@@ -108,10 +97,8 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"INSERT INTO Inquilino (Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
-                            DniGarante, NombreGarante, TelefonoGarante, EmailGarante) 
-                            VALUES(@nombre, @dni, @fecha_n, @domicilio, @email, @telefono, 
-                            @dni_garante, @nombre_garante, @tel_garante, @email_garante);
+                string sql = @"INSERT INTO Inquilino (Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono) 
+                            VALUES(@nombre, @dni, @fecha_n, @domicilio, @email, @telefono);
                             SELECT last_insert_id();";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -122,10 +109,6 @@ namespace InmobiliariaAlbornoz.Data
                     comm.Parameters.AddWithValue("@Domicilio", p.DireccionTrabajo);
                     comm.Parameters.AddWithValue("@email", p.Email);
                     comm.Parameters.AddWithValue("@telefono", p.Telefono);
-                    comm.Parameters.AddWithValue("@dni_garante", p.DniGarante);
-                    comm.Parameters.AddWithValue("@nombre_garante", p.NombreGarante);
-                    comm.Parameters.AddWithValue("@tel_garante", p.TelefonoGarante);
-                    comm.Parameters.AddWithValue("@email_garante", p.EmailGarante);
 
                     conn.Open();
 
@@ -144,8 +127,8 @@ namespace InmobiliariaAlbornoz.Data
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono, 
-                           NombreGarante, DniGarante, TelefonoGarante, EmailGarante FROM Inquilino;";
+                string sql = @"SELECT Id, Nombre, Dni, FechaN, DomicilioTrabajo, Email, Telefono
+                                FROM Inquilino;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -162,10 +145,6 @@ namespace InmobiliariaAlbornoz.Data
                             DireccionTrabajo = reader.GetString(4),
                             Email = reader.GetString(5),
                             Telefono = reader.GetString(6),
-                            NombreGarante = reader.GetString(7),
-                            DniGarante = reader.GetString(8),
-                            TelefonoGarante = reader.GetString(9),
-                            EmailGarante = reader.GetString(10),
                         };
 
                         list.Add(p);
@@ -181,8 +160,7 @@ namespace InmobiliariaAlbornoz.Data
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"SELECT Id, Dni, Nombre, FechaN, DomicilioTrabajo, Telefono, Email, 
-                                DniGarante, NombreGarante, TelefonoGarante, EmailGarante 
+                string sql = @"SELECT Id, Dni, Nombre, FechaN, DomicilioTrabajo, Telefono, Email 
                                 FROM Inquilino WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -202,11 +180,6 @@ namespace InmobiliariaAlbornoz.Data
                         i.DireccionTrabajo = reader.GetString(4);
                         i.Telefono = reader.GetString(5);
                         i.Email = reader.GetString(6);
-
-                        i.DniGarante = reader.GetString(7);
-                        i.NombreGarante = reader.GetString(8);
-                        i.TelefonoGarante = reader.GetString(9);
-                        i.EmailGarante = reader.GetString(10);
                     }
                     
                     conn.Close();

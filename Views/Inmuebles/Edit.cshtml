@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Editar Inmueble";
+    IList < Propietario > Propietarios = (List<Propietario>)ViewBag.Propietarios;
 }
 
 <h1>Editar</h1>
@@ -44,7 +45,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdPropietario" class="control-label"></label>
-                <input asp-for="IdPropietario" class="form-control" />
+                <select class="form-control" name="IdPropietario">
+                    @foreach (var p in Propietarios)
+                    {
+                        @:<option value="@p.Id" @(p.Id == Model.IdPropietario ? "selected" : "")>@(p.Nombre)</option>
+                    }
+                </select>
                 <span asp-validation-for="IdPropietario" class="text-danger"></span>
             </div>
             <div class="form-group">

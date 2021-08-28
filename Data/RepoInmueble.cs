@@ -76,7 +76,7 @@ namespace InmobiliariaAlbornoz.Data
                     conn.Open();
                     var reader = comm.ExecuteReader();
 
-                    while (reader.Read())
+                    if (reader.Read())
                     {
                         i.Id = reader.GetInt32(0);
                         i.Direccion = reader.GetString(1);

@@ -1,0 +1,106 @@
+﻿@model InmobiliariaAlbornoz.Models.Contrato
+
+@{
+    ViewData["Title"] = "Cargar Contrato";
+    IList<Inmueble> Inmuebles = (List<Inmueble>)ViewBag.Inmuebles;
+    IList<Inquilino> Inquilinos = (List<Inquilino>)ViewBag.Inquilinos;
+}
+
+@if (TempData["Error"] != null)
+{
+    <h1>ERROR</h1>
+    <p class="alert-warning">@TempData["Error"]</p>
+}
+
+@if (Inmuebles.Count() == 0 || Inquilinos.Count() == 0)
+{
+    @if (Inmuebles.Count() == 0)
+    {
+        <p class="alert-warning">No hay inmuebles cargados en la Base de Datos</p>
+    }
+    @if (Inquilinos.Count() == 0)
+    {
+        <p class="alert-warning">No hay inquilinos cargados en la Base de Datos</p>
+    }
+}
+else
+{
+    <h1>Cargar</h1>
+
+    <h4>Contrato</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="IdInmueble" class="control-label"></label>
+                    <select class="form-control" name="IdInmueble">
+                        @foreach (var i in Inmuebles)
+                        {
+                            <option value="@i.Id">
+                                @(i.Id +" - "+ i.Direccion)
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdInmueble" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdInquilino" class="control-label"></label>
+                    <select class="form-control" name="IdInquilino">
+                        @foreach (var i2 in Inquilinos)
+                        {
+                            <option value="@i2.Id">
+                                @(i2.Dni +" - " + i2.Nombre)
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdInquilino" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Desde" class="control-label"></label>
+                    <input asp-for="Desde" type="date" class="form-control" />
+                    <span asp-validation-for="Desde" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Hasta" class="control-label"></label>
+                    <input asp-for="Hasta" type="date" class="form-control" />
+                    <span asp-validation-for="Hasta" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DniGarante" class="control-label"></label>
+                    <input asp-for="DniGarante" class="form-control" />
+                    <span asp-validation-for="DniGarante" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NombreGarante" class="control-label"></label>
+                    <input asp-for="NombreGarante" class="form-control" />
+                    <span asp-validation-for="NombreGarante" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TelefonoGarante" class="control-label"></label>
+                    <input asp-for="TelefonoGarante" class="form-control" />
+                    <span asp-validation-for="TelefonoGarante" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmailGarante" class="control-label"></label>
+                    <input asp-for="EmailGarante" class="form-control" />
+                    <span asp-validation-for="EmailGarante" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Cargar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+
+
+<div>
+    <a asp-action="Index">Volver a la Lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
