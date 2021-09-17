@@ -1,0 +1,98 @@
+﻿@model InmobiliariaAlbornoz.Models.Pago
+
+@{
+    ViewData["Title"] = "Cargar Pago";
+    Contrato c = (Contrato)ViewBag.Contrato;
+}
+
+<h1>Cargar</h1>
+
+<h4>Pago</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if (c != null)
+        {
+            <form action="/Pagos/Create/@c.Id" method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
+
+                <div class="form-group">
+                    <label asp-for="FechaCorrespondiente" class="control-label"></label>
+                    <input asp-for="FechaCorrespondiente" class="form-control" />
+                    <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Monto" class="control-label"></label>
+                    <input asp-for="Monto" class="form-control" />
+                    <span asp-validation-for="Monto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tipo" class="control-label"></label>
+                    <input asp-for="Tipo" class="form-control" />
+                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Cargar" class="btn btn-primary" />
+                </div>
+            </form>
+        }
+        else
+        {
+            <p class="alert-warning p-3" id="aviso"></p>
+            <div class="row">
+                <div class="col-sm-8">
+                    <label for="Inquilino" class="control-label" />
+                    <input type="text" name="DniInquilino" id="DniInquilino" pattern="[0-9]+" class="form-control" placeholder="Ingrese DNI" />
+                </div>
+                <div class="col-sm-4">
+                    <button id="searchBtn" class="btn btn-secondary" onclick="searchInquilinoContratos()">Buscar</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="IdContrato" class="control-label"></label>
+                    <select id="selectContratos" asp-for="IdContrato" class="form-control" disabled>
+                        @*<option value="0" id="default">Sin contratos</option>*@
+                    </select>
+                    <span asp-validation-for="IdContrato" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FechaCorrespondiente" class="control-label"></label>
+                    <input id="fecha" asp-for="FechaCorrespondiente" class="form-control"  disabled/>
+                    <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Monto" class="control-label"></label>
+                    <input id="monto" type="number" min="1" step="any" asp-for="Monto" class="form-control"  disabled/>
+                    <span asp-validation-for="Monto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tipo" class="control-label"></label>
+                    <input id="tipo" asp-for="Tipo" class="form-control"  disabled/>
+                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input id="enviar" type="submit" value="Cargar" class="btn btn-primary"  disabled/>
+                </div>
+            </form>
+        }
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la Lista</a>
+</div>
+
+<script src="~/js/searchInquilinoContratos.js"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

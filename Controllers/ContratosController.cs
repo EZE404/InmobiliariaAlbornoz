@@ -45,7 +45,6 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 var c = repo.Details(id);
                 return View(c);
-
             }
             catch (Exception e)
             {
@@ -61,14 +60,12 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 ViewBag.Inmuebles = repoInmueble.All();
                 ViewBag.Inquilinos = repoInquilino.All();
-
                 return View();
             }
             catch (Exception e)
             {
                 ViewData["Error"] = "Ocurrió un error al recuperar Inmuebles e/o Inquilinos: " + e.Message;
                 return View();
-                
             }
         }
 

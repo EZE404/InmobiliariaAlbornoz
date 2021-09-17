@@ -1,0 +1,57 @@
+﻿@model InmobiliariaAlbornoz.Models.Pago
+
+@{
+    ViewData["Title"] = "Detalles de Pago";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>Pago</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.IdContrato)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.IdContrato)
+            <a asp-controller="Contratos" asp-action="Details" asp-route-id="@Model.IdContrato">
+                Ver Contrato
+            </a>
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.FechaCorrespondiente)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.FechaCorrespondiente)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Monto)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Monto)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    <a asp-action="Index">Volver a la lista</a>
+</div>

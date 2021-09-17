@@ -49,8 +49,13 @@ namespace InmobiliariaAlbornoz
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "SearchInquilinoContratos",
+                    pattern: "Pagos/Inquilino/{dni}", new { controller = "Pagos", action = "Inquilino" });
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }
