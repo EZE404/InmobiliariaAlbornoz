@@ -281,5 +281,28 @@ namespace InmobiliariaAlbornoz.Data
 
             return lista;
         }
+
+        public Boolean Check(int id)
+        {
+            Boolean res = false;
+
+            using(MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                // TODO: HACER LA QUERY. NO ES ESTO!!!
+                string sql = @"SELECT * FROM Contrato c WHERE c.Id = @id ";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    // TODO: revisar si el contrato está vigente y cambiar res
+                    res = (reader.HasRows) ? true : false;
+                }
+            }
+
+            return res;
+        }
     }
 }

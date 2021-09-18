@@ -104,11 +104,24 @@ namespace InmobiliariaAlbornoz.Controllers
         // POST: PagosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int id, Pago p)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (id > 0 && p.IdContrato == 0)
+                {
+                    // TODO: Rescatar IdContrato y volver a chequear que realmente ésté vigente
+                    //var vigente = repoContrato.algo(id);
+                    // TODO: SI Contrato está vigente, Enviar p al repo.
+                    p.Id = 0;
+                    p.IdContrato = id;
+                    //var res = repo.Put(p);
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    // var res = repo.Put(p)
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {

@@ -13,30 +13,31 @@
     <div class="col-md-4">
         @if (c != null)
         {
-            <form action="/Pagos/Create/@c.Id" method="POST">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" asp-route-id="@c.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
+            <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
 
-                <div class="form-group">
-                    <label asp-for="FechaCorrespondiente" class="control-label"></label>
-                    <input asp-for="FechaCorrespondiente" class="form-control" />
-                    <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Monto" class="control-label"></label>
-                    <input asp-for="Monto" class="form-control" />
-                    <span asp-validation-for="Monto" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Tipo" class="control-label"></label>
-                    <input asp-for="Tipo" class="form-control" />
-                    <span asp-validation-for="Tipo" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Cargar" class="btn btn-primary" />
-                </div>
-            </form>
+            <div class="form-group">
+                <label asp-for="FechaCorrespondiente" class="control-label"></label>
+                <input asp-for="FechaCorrespondiente" class="form-control" />
+                <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Monto" class="control-label"></label>
+                <input asp-for="Monto" class="form-control" />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cargar" class="btn btn-primary" />
+            </div>
+
+        </form>
         }
         else
         {

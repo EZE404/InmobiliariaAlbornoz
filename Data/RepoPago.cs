@@ -102,32 +102,26 @@ namespace InmobiliariaAlbornoz.Data
             return p;
         }
 
-        public int Put(Contrato c)
+        public int Put(Pago p)
         {
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"INSERT INTO Contrato (IdInmueble, IdInquilino, Desde, Hasta, 
-                            DniGarante, NombreGarante, TelefonoGarante, EmailGarante) 
-                            VALUES(@id_inmueble, @id_inquilino, @desde, @hasta, 
-                            @dni_garante, @nombre_garante, @tel_garante, @email_garante);
+                string sql = @"INSERT INTO Pago (IdContrato, FechaCorrespondiente, Monto, Tipo) 
+                            VALUES(@id_contrato, @fecha_cor, @monto, @tipo);
                             SELECT last_insert_id();";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
-                    comm.Parameters.AddWithValue("@id_inmueble", c.IdInmueble);
-                    comm.Parameters.AddWithValue("@id_inquilino", c.IdInquilino);
-                    comm.Parameters.AddWithValue("@desde", c.Desde);
-                    comm.Parameters.AddWithValue("@hasta", c.Hasta);
-                    comm.Parameters.AddWithValue("@dni_garante", c.DniGarante);
-                    comm.Parameters.AddWithValue("@nombre_garante", c.NombreGarante);
-                    comm.Parameters.AddWithValue("@tel_garante", c.TelefonoGarante);
-                    comm.Parameters.AddWithValue("@email_garante", c.EmailGarante);
+                    comm.Parameters.AddWithValue("@id_contrato", p.IdContrato);
+                    comm.Parameters.AddWithValue("@fecha_cor", p.FechaCorrespondiente);
+                    comm.Parameters.AddWithValue("@monto", p.Monto);
+                    comm.Parameters.AddWithValue("@tipo", p.Tipo);
 
                     conn.Open();
 
                     res = Convert.ToInt32(comm.ExecuteScalar());
-                    c.Id = res;
+                    p.Id = res;
 
                     conn.Close();
                 }
