@@ -50,7 +50,7 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"DELETE FROM Contrato WHERE Id = @id ;";
+                string sql = @"UPDATE Contrato SET Valido = 0 WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -62,6 +62,38 @@ namespace InmobiliariaAlbornoz.Data
             }
             return res;
         }
+
+        public bool CheckDates(int idInmueble, DateTime desde, DateTime hasta)
+        {
+            bool res = true;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT c.* FROM contrato c
+                            WHERE (c.Desde BETWEEN @desde AND @hasta
+                            OR c.Hasta BETWEEN @desde AND @hasta)
+                            AND c.Valido = 1 AND c.IdInmueble = @id ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@desde", desde);
+                    comm.Parameters.AddWithValue("@hasta", hasta);
+                    comm.Parameters.AddWithValue("@id", idInmueble);
+
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        res = false;
+                    }
+
+                    conn.Close();
+                }
+            }
+            return res;
+        }
+
         public Contrato Details(int id)
         {
             Contrato c = new Contrato();
@@ -69,7 +101,7 @@ namespace InmobiliariaAlbornoz.Data
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, 
-                                c.DniGarante, c.NombreGarante, c.TelefonoGarante, c.EmailGarante, 
+                                c.DniGarante, c.NombreGarante, c.TelefonoGarante, c.EmailGarante, c.Valido,
                                 i.IdPropietario, p.Nombre, 
                                 i2.Nombre
                                 FROM Contrato c INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
@@ -88,8 +120,8 @@ namespace InmobiliariaAlbornoz.Data
                     {
                         Propietario p = new Propietario
                         {
-                            Id = reader.GetInt32(9),
-                            Nombre = reader.GetString(10),
+                            Id = reader.GetInt32(10),
+                            Nombre = reader.GetString(11),
                         };
 
                         Inmueble i = new Inmueble
@@ -101,7 +133,7 @@ namespace InmobiliariaAlbornoz.Data
                         Inquilino i2 = new Inquilino
                         {
                             Id = reader.GetInt32(2),
-                            Nombre = reader.GetString(11)
+                            Nombre = reader.GetString(12)
                         };
 
 
@@ -114,6 +146,7 @@ namespace InmobiliariaAlbornoz.Data
                         c.NombreGarante = reader.GetString(6);
                         c.TelefonoGarante = reader.GetString(7);
                         c.EmailGarante = reader.GetString(8);
+                        c.Valido = reader.GetBoolean(9);
                         c.Inmueble = i;
                         c.Inquilino = i2;
 
@@ -164,7 +197,7 @@ namespace InmobiliariaAlbornoz.Data
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, c.NombreGarante, 
+                string sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, c.NombreGarante, c.Valido,
                                 i.IdPropietario, p.Nombre, 
                                 i2.Nombre
                                 FROM Contrato c INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
@@ -180,8 +213,8 @@ namespace InmobiliariaAlbornoz.Data
                     {
                         Propietario p = new Propietario
                         {
-                            Id = reader.GetInt32(6),
-                            Nombre = reader.GetString(7),
+                            Id = reader.GetInt32(7),
+                            Nombre = reader.GetString(8),
                         };
 
                         Inmueble i = new Inmueble
@@ -193,7 +226,7 @@ namespace InmobiliariaAlbornoz.Data
                         Inquilino i2 = new Inquilino
                         {
                             Id = reader.GetInt32(2),
-                            Nombre = reader.GetString(8)
+                            Nombre = reader.GetString(9)
                         };
 
                         Contrato c = new Contrato
@@ -204,6 +237,88 @@ namespace InmobiliariaAlbornoz.Data
                             Desde = reader.GetDateTime(3),
                             Hasta = reader.GetDateTime(4),
                             NombreGarante = reader.GetString(5),
+                            Valido = reader.GetBoolean(6),
+                            Inmueble = i,
+                            Inquilino = i2,
+                        };
+
+                        lista.Add(c);
+                    }
+
+                    conn.Close();
+                }
+
+            }
+
+            return lista;
+        }
+
+        public IList<Contrato> AllByInquilino(int id, bool valid)
+        {
+            IList<Contrato> lista = new List<Contrato>();
+            String sql;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                if (!valid)
+                {
+                    sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, c.NombreGarante, c.Valido,
+                            i.IdPropietario, i.Direccion, p.Nombre, 
+                            i2.Nombre
+                            FROM Contrato c INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
+                            INNER JOIN Propietario p ON i.IdPropietario = p.Id 
+                            INNER JOIN Inquilino i2 ON c.IdInquilino = i2.Id 
+                            WHERE i2.Id = @id ;";
+                } else
+                {
+                    sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, c.NombreGarante, c.Valido,
+                            i.IdPropietario, i.Direccion, p.Nombre,
+                            i2.Nombre 
+                            FROM Contrato c 
+                            INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
+                            INNER JOIN Propietario p ON i.IdPropietario = p.Id 
+                            INNER JOIN Inquilino i2 ON c.IdInquilino = i2.Id 
+                            WHERE c.Valido = 1 
+                            AND current_date() BETWEEN c.Desde AND c.Hasta 
+                            AND i2.Id = @id ;";
+                }
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Propietario p = new Propietario
+                        {
+                            Id = reader.GetInt32(7),
+                            Nombre = reader.GetString(9),
+                        };
+
+                        Inmueble i = new Inmueble
+                        {
+                            Id = reader.GetInt32(1),
+                            Direccion = reader.GetString(8),
+                            Propietario = p,
+                        };
+
+                        Inquilino i2 = new Inquilino
+                        {
+                            Id = reader.GetInt32(2),
+                            Nombre = reader.GetString(10)
+                        };
+
+                        Contrato c = new Contrato
+                        {
+                            Id = reader.GetInt32(0),
+                            IdInmueble = reader.GetInt32(1),
+                            IdInquilino = reader.GetInt32(2),
+                            Desde = reader.GetDateTime(3),
+                            Hasta = reader.GetDateTime(4),
+                            NombreGarante = reader.GetString(5),
+                            Valido = reader.GetBoolean(6),
                             Inmueble = i,
                             Inquilino = i2,
                         };

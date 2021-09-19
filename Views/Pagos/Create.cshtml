@@ -5,6 +5,20 @@
     Contrato c = (Contrato)ViewBag.Contrato;
 }
 
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
 <h1>Cargar</h1>
 
 <h4>Pago</h4>
@@ -13,31 +27,31 @@
     <div class="col-md-4">
         @if (c != null)
         {
-        <form asp-action="Create" asp-route-id="@c.Id">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form asp-action="Create" asp-route-id="@c.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
+                <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
 
-            <div class="form-group">
-                <label asp-for="FechaCorrespondiente" class="control-label"></label>
-                <input asp-for="FechaCorrespondiente" class="form-control" />
-                <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Monto" class="control-label"></label>
-                <input asp-for="Monto" class="form-control" />
-                <span asp-validation-for="Monto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tipo" class="control-label"></label>
-                <input asp-for="Tipo" class="form-control" />
-                <span asp-validation-for="Tipo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Cargar" class="btn btn-primary" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="FechaCorrespondiente" class="control-label"></label>
+                    <input asp-for="FechaCorrespondiente" class="form-control" />
+                    <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Monto" class="control-label"></label>
+                    <input asp-for="Monto" class="form-control" />
+                    <span asp-validation-for="Monto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tipo" class="control-label"></label>
+                    <input asp-for="Tipo" class="form-control" />
+                    <span asp-validation-for="Tipo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Cargar" class="btn btn-primary" />
+                </div>
 
-        </form>
+            </form>
         }
         else
         {
@@ -67,21 +81,21 @@
 
                 <div class="form-group">
                     <label asp-for="FechaCorrespondiente" class="control-label"></label>
-                    <input id="fecha" asp-for="FechaCorrespondiente" class="form-control"  disabled/>
+                    <input id="fecha" asp-for="FechaCorrespondiente" class="form-control" disabled />
                     <span asp-validation-for="FechaCorrespondiente" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Monto" class="control-label"></label>
-                    <input id="monto" type="number" min="1" step="any" asp-for="Monto" class="form-control"  disabled/>
+                    <input id="monto" type="number" min="1" step="any" asp-for="Monto" class="form-control" disabled />
                     <span asp-validation-for="Monto" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Tipo" class="control-label"></label>
-                    <input id="tipo" asp-for="Tipo" class="form-control"  disabled/>
+                    <input id="tipo" asp-for="Tipo" class="form-control" disabled />
                     <span asp-validation-for="Tipo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input id="enviar" type="submit" value="Cargar" class="btn btn-primary"  disabled/>
+                    <input id="enviar" type="submit" value="Cargar" class="btn btn-primary" disabled />
                 </div>
             </form>
         }

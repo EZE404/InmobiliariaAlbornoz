@@ -15,11 +15,13 @@ namespace InmobiliariaAlbornoz.Controllers
         private RepoContrato repo;
         private RepoInmueble repoInmueble;
         private RepoInquilino repoInquilino;
+        private RepoContrato repoContrato;
         public ContratosController(IConfiguration config)
         {
             this.repo = new RepoContrato(config);
             this.repoInmueble = new RepoInmueble(config);
             this.repoInquilino = new RepoInquilino(config);
+            this.repoContrato = new RepoContrato(config);
         }
 
         // GET: ContratosController
@@ -58,7 +60,7 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                ViewBag.Inmuebles = repoInmueble.All();
+                ViewBag.Inmuebles = repoInmueble.AllValid();
                 ViewBag.Inquilinos = repoInquilino.All();
                 return View();
             }
@@ -76,21 +78,47 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                var res = repo.Put(c);
-                if (res > 0)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var datesAreOk = repoContrato.CheckDates(c.IdInmueble, c.Desde, c.Hasta);
+                    var inmuebleIsOk = repoInmueble.CheckAvailability(c.IdInmueble);
+                    var inquilinoIsOk = repoInquilino.Details(c.IdInquilino).Id > 0 ? true : false;
+
+                    if (!datesAreOk)
+                    {
+                        TempData["msg"] = "El rango de fechas seleccionadas no está disponible";
+                        return RedirectToAction(nameof(Create));
+                    }
+
+                    if (inmuebleIsOk && inquilinoIsOk && datesAreOk)
+                    {
+                        var res = repo.Put(c);
+                        if (res > 0)
+                        {
+                            TempData["msg"] = "Contrato cargado";
+                            return RedirectToAction(nameof(Index));
+                        }
+                        else
+                        {
+                            TempData["msg"] = "No se cargó el contrato. Intente nuevamente.";
+                            return RedirectToAction(nameof(Create));
+                        }
+                    }
+                    else
+                    {
+                        TempData["msg"] = "Datos no válidos. Intente nuevamente.";
+                        return RedirectToAction(nameof(Create));
+                    }
                 }
                 else
                 {
-                    Exception e = new Exception("No se cargó el contrato. Intente de nuevo");
-                    throw e;
+                    TempData["msg"] = "Datos no válidos. Intente nuevamente.";
+                    return RedirectToAction(nameof(Create));
                 }
-                
             }
             catch(Exception e)
             {
-                TempData["Error"] = e.Message;
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return RedirectToAction(nameof(Create));
             }
         }

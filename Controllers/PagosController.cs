@@ -85,7 +85,7 @@ namespace InmobiliariaAlbornoz.Controllers
                 if (dni != null)
                 {
                     Inquilino i = repoInquilino.Details(dni);
-                    IList<Contrato> c = repoContrato.AllByInquilino(i.Id);
+                    IList<Contrato> c = repoContrato.AllByInquilino(i.Id, true);
 
                     pc.Inquilino = i;
                     pc.Contratos = c;
@@ -106,22 +106,46 @@ namespace InmobiliariaAlbornoz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(int id, Pago p)
         {
+
             try
             {
-                if (id > 0 && p.IdContrato == 0)
+                if (ModelState.IsValid)
                 {
-                    // TODO: Rescatar IdContrato y volver a chequear que realmente ésté vigente
-                    //var vigente = repoContrato.algo(id);
-                    // TODO: SI Contrato está vigente, Enviar p al repo.
-                    p.Id = 0;
-                    p.IdContrato = id;
-                    //var res = repo.Put(p);
-                    return RedirectToAction(nameof(Index));
+                    if (id > 0 && p.IdContrato == 0)
+                    {
+                        p.Id = 0;
+                        p.IdContrato = id;
+                    }
+
+                    // TODO: Rescatar IdContrato y volver a chequear que realmente esté vigente
+                    Contrato c = repoContrato.Details(p.IdContrato);
+
+                    if (c.Valido)
+                    {
+                        // TODO: SI Contrato está vigente, Enviar p al repo.
+                        var res = repo.Put(p);
+                        if (res > 0)
+                        {
+                            TempData["msg"] = "Pago cargado";
+                            return RedirectToAction(nameof(Index));
+                        }
+                        else
+                        {
+                            TempData["msg"] = "Pago no cargado. Intente de nuevo.";
+                            return RedirectToAction(nameof(Create));
+                        }
+                    }
+                    else
+                    {
+                        TempData["msg"] = "El contrato indicado no está vigente o fue cancelado.";
+                        return RedirectToAction(nameof(Create));
+                    }
                 } else
                 {
-                    // var res = repo.Put(p)
-                    return RedirectToAction(nameof(Index));
+                    TempData["msg"] = "Datos Inválidos. Intente nuevamente";
+                    return RedirectToAction(nameof(Create));
                 }
+
             }
             catch
             {
@@ -132,28 +156,81 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: PagosController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                Pago p = repo.Details(id);
+                if (p.Id > 0)
+                {
+                    return View(p);
+                }
+                else
+                {
+                    TempData["msg"] = "El pago " + id + " no existe en la base de datos. Intente nuevamente";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: PagosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Pago p)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var res = repo.Edit(p);
+                    if (res > 0)
+                    {
+                        TempData["msg"] = "Pago editado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["msg"] = "Cambios no guardados. Intente Nuevamente";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+                }
+                else
+                {
+                    TempData["msg"] = "Datos de pago no válidos. Intente Nuevamente.";
+                    return RedirectToAction(nameof(Edit), new { id = id});
+                }
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // GET: PagosController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                Pago p = repo.Details(id);
+                if (p.Id > 0)
+                {
+                    return View(p);
+                }
+                else
+                {
+                    TempData["msg"] = "El Pago " + id + " no existe en la base de datos.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return View();
+            }
         }
 
         // POST: PagosController/Delete/5
@@ -161,13 +238,26 @@ namespace InmobiliariaAlbornoz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
+
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var res = repo.Delete(id);
+                if (res > 0)
+                {
+                    TempData["msg"] = "Pago Anulado.";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["msg"] = "Pago no encontrado. Vuelva a Intentar.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {
-                return View();
+                TempData["msg"] = "Ocurrió un error. Vuelva a intentar.";
+                return RedirectToAction(nameof(Delete), new { id = id });
             }
         }
     }

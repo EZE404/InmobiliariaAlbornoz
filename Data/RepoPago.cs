@@ -14,28 +14,21 @@ namespace InmobiliariaAlbornoz.Data
         {
 
         }
-        public int Edit(Contrato c)
+        public int Edit(Pago p)
         {
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"UPDATE Contrato
-                            SET IdInmueble = @id_inmueble , IdInquilino = @id_inquilino , Desde = @desde , 
-                            Hasta = @hasta , DniGarante = @dni_garante , NombreGarante = @nombre_garante, 
-                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante 
-                            WHERE Id = @id ;";
+                string sql = @"UPDATE Pago
+                               SET FechaCorrespondiente = @fecha_cor , Monto = @monto , Tipo = @tipo 
+                               WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
-                    comm.Parameters.AddWithValue("@id_inmueble", c.IdInmueble);
-                    comm.Parameters.AddWithValue("@id_inquilino", c.IdInquilino);
-                    comm.Parameters.AddWithValue("@desde", c.Desde);
-                    comm.Parameters.AddWithValue("@hasta", c.Hasta);
-                    comm.Parameters.AddWithValue("@dni_garante", c.DniGarante);
-                    comm.Parameters.AddWithValue("@nombre_garante", c.NombreGarante);
-                    comm.Parameters.AddWithValue("@tel_garante", c.TelefonoGarante);
-                    comm.Parameters.AddWithValue("@email_garante", c.EmailGarante);
-                    comm.Parameters.AddWithValue("@id", c.Id);
+                    comm.Parameters.AddWithValue("@fecha_cor", p.FechaCorrespondiente);
+                    comm.Parameters.AddWithValue("@monto", p.Monto);
+                    comm.Parameters.AddWithValue("@tipo", p.Tipo);
+                    comm.Parameters.AddWithValue("@id", p.Id);
 
 
                     conn.Open();
@@ -50,7 +43,7 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"DELETE FROM Contrato WHERE Id = @id ;";
+                string sql = @"UPDATE Pago SET Anulado = 1 WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -136,7 +129,7 @@ namespace InmobiliariaAlbornoz.Data
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT p.Id, p.IdContrato, p.Fecha, p.FechaCorrespondiente, 
-                                p.Monto, p.Tipo FROM pago p;";
+                                p.Monto, p.Tipo, p.Anulado FROM pago p;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -158,6 +151,7 @@ namespace InmobiliariaAlbornoz.Data
                             FechaCorrespondiente = reader.GetDateTime(3),
                             Monto = reader.GetDecimal(4),
                             Tipo = reader.GetString(5),
+                            Anulado = reader.GetBoolean(6),
                             Contrato = c
                         };
 

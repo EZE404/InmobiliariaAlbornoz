@@ -1,0 +1,95 @@
+﻿@model InmobiliariaAlbornoz.Models.Pago
+
+@{
+    ViewData["Title"] = "Anular Pago";
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model == null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h4>¿Está seguro que quiere anular el pago?<br />Esta acción es irreversible.</h4>
+
+    <hr />
+
+    <h1>Anular</h1>
+
+    <div>
+        <h4>Pago</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IdContrato)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IdContrato)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FechaCorrespondiente)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaCorrespondiente)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Monto)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Monto)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Tipo)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Tipo)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Anulado)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Anulado)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="submit" value="Anular" class="btn btn-danger" /> |
+            <a asp-action="Index" class="btn btn-primary">Volver lista de Pagos</a>
+        </form>
+    </div>
+}

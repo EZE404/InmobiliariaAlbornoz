@@ -10,13 +10,13 @@
     <h4>Pago</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Id)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.IdContrato)
         </dt>
         <dd class="col-sm-8">
@@ -25,33 +25,40 @@
                 Ver Contrato
             </a>
         </dd>
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Fecha)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Fecha)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.FechaCorrespondiente)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.FechaCorrespondiente)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Monto)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Monto)
         </dd>
-        <dt class = "col-sm-4">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Tipo)
         </dt>
-        <dd class = "col-sm-8">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Tipo)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Anulado)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Anulado)
         </dd>
     </dl>
 </div>
 <div>
+    <a asp-action="Index">Volver a la lista</a> |
     @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Volver a la lista</a>
+    @Html.ActionLink("Anular", "Delete", new { id = Model.Id }) 
 </div>

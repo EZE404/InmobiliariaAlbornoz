@@ -6,10 +6,18 @@
     IList<Inquilino> Inquilinos = (List<Inquilino>)ViewBag.Inquilinos;
 }
 
-@if (TempData["Error"] != null)
+@if (TempData["msg"] != null)
 {
-    <h1>ERROR</h1>
-    <p class="alert-warning">@TempData["Error"]</p>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 
 @if (Inmuebles.Count() == 0 || Inquilinos.Count() == 0)

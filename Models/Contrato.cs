@@ -23,6 +23,9 @@ namespace InmobiliariaAlbornoz.Models
         [Display(Name = "Fecha de Vencimiento"), Required]
         public DateTime Hasta { get; set; }
 
+        [Display(Name = "Válido")]
+        public bool Valido { get; set; }
+
         //Relaciones
         public Inmueble Inmueble { get; set; }
         public Inquilino Inquilino { get; set; }

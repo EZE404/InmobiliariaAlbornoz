@@ -4,6 +4,20 @@
     ViewData["Title"] = "Lista de Pagos";
 }
 
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
 <h1>Pagos</h1>
 
 <p>
@@ -30,11 +44,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tipo)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Anulado)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -57,11 +75,14 @@
                 @Html.DisplayFor(modelItem => item.Tipo)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+                @Html.DisplayFor(modelItem => item.Anulado)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Anular", "Delete", new { id = item.Id })
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
