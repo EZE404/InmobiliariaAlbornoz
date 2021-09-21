@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 19-09-2021 a las 07:09:13
+-- Tiempo de generación: 21-09-2021 a las 06:56:25
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `contrato` (
   PRIMARY KEY (`Id`,`IdInmueble`,`IdInquilino`),
   KEY `fk_inmueble` (`IdInmueble`),
   KEY `fk_inquilino` (`IdInquilino`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `contrato`
@@ -172,6 +172,34 @@ INSERT INTO `propietario` (`Id`, `Dni`, `Nombre`, `FechaN`, `Domicilio`, `Telefo
 (2, '29000567', 'MarioAvaca', '2021-08-16', 'dfgdfhdfgh', '45346456', 'mario@correo.com'),
 (3, '29666777', 'Genaro Farías', '1975-09-09', 'Aeropuerto', '453425425', 'genaro@mail.com'),
 (4, '41999888', 'Gastón Sosa', '2021-09-09', 'Edesal', '266543654', 'gaston@correo.com');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `Apellido` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `AvatarUrl` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `Email` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `Clave` varchar(200) CHARACTER SET utf8mb4 NOT NULL,
+  `Rol` int(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `usuario_email` (`Email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `AvatarUrl`, `Email`, `Clave`, `Rol`) VALUES
+(1, 'Ezequiel', 'Albornoz', NULL, 'eze@correo.com', 'GlrdpnLh77+eJQu0YICaF//xxolEqsY44HoghCYfHEI=', 2),
+(2, 'Mario', 'Avaca', NULL, 'mario@correo.com', 'JBrO+Xjqu3sRcGE/ykDEwx018NDGa9uQbZqaJdFPjs8=', 3),
+(3, 'Spider', 'Pig', '/Uploads\\avatar_3.jpg', 'piggy@correo.com', '36zg4LqQrmqzRNhRj0Hyxli1ua8j2hub+W0yslJFP8o=', 3);
 
 --
 -- Restricciones para tablas volcadas
