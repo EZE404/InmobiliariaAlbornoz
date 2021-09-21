@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "Denied";
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<center>
+    <font face="Arial">
+        <b>
+            No tienes privilegios para la acción que intentas<br><br>
+
+            Volviendo a inicio...
+            <form>
+                <input type="text" size="3" id="timer" name="redirect2" value="5">
+            </form>
+            segundos
+        </b>
+    </font>
+</center>
+
+
+<script>
+    var targetURL = "/"
+    var currentsecond = 5;
+    function countredirect() {
+        if (currentsecond != 1) {
+            currentsecond -= 1
+            document.getElementById('timer').value = currentsecond;
+        }
+        else {
+            window.location = targetURL;
+            return
+        }
+        setTimeout("countredirect()", 1000)
+    }
+    countredirect();
+</script>
