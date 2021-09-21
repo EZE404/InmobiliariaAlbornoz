@@ -7,5 +7,7 @@
 # Falta:
 
 * Pulir mensajes y estética en algunos ABM.
+* Agregar restricciones a los ABM (No están para no estar logueando a cada rato durante desarrollo)
 * Terminar edición de Usuarios.
 * Informes.
+* Actualizar DER en el Home Page.
