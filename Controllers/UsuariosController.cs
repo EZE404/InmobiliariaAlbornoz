@@ -1,5 +1,6 @@
 ﻿using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
+using InmobiliariaAlbornoz.ModelsAux;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -43,16 +44,41 @@ namespace InmobiliariaAlbornoz.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Details(int id)
         {
-            var e = repo.ObtenerPorId(id);
-            return View(e);
+            try
+            {
+                var u = repo.ObtenerPorId(id);
+                if (u != null)
+                {
+                    return View(u);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró el usuario";
+                    return RedirectToAction(nameof(Index), new { id = id });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         // GET: Usuarios/Create
         [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
-            ViewBag.Roles = Usuario.ObtenerRoles();
-            return View();
+            try
+            {
+                ViewBag.Roles = Usuario.ObtenerRoles();
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocurrió un error al procesar formulario. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         // POST: Usuarios/Create
@@ -107,20 +133,55 @@ namespace InmobiliariaAlbornoz.Controllers
         [Authorize]
         public ActionResult Perfil()
         {
-            ViewData["Title"] = "Mi perfil";
-            var u = repo.ObtenerPorEmail(User.Identity.Name);
-            ViewBag.Roles = Usuario.ObtenerRoles();
-            return View("Edit", u);
+            try
+            {
+                ViewData["Title"] = "Mi perfil";
+                TempData["returnUrl"] = Request.Headers["referer"].FirstOrDefault();
+                var u = repo.ObtenerPorEmail(User.Identity.Name);
+                if (u != null)
+                {
+                    ViewBag.Roles = Usuario.ObtenerRoles();
+                    return View("Edit", u);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró usuario. Intente nuevamente.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
         // GET: Usuarios/Edit/5
         [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id)
         {
-            ViewData["Title"] = "Editar usuario";
-            var u = repo.ObtenerPorId(id);
-            ViewBag.Roles = Usuario.ObtenerRoles();
-            return View(u);
+            try
+            {
+                ViewData["Title"] = "Editar usuario";
+                TempData["returnUrl"] = Request.Headers["referer"].FirstOrDefault();
+                var u = repo.ObtenerPorId(id);
+                if (u != null)
+                {
+                    ViewBag.Roles = Usuario.ObtenerRoles();
+                    return View(u);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró el usuario. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
         // POST: Usuarios/Edit/5
@@ -129,32 +190,226 @@ namespace InmobiliariaAlbornoz.Controllers
         [Authorize]
         public ActionResult Edit(int id, Usuario u)
         {
-            var vista = nameof(Edit);//de que vista provengo
+            var returnUrl = Request.Headers["referer"].FirstOrDefault();
+            bool editAvatar = false;
+            bool editRol = false;
+
             try
             {
-                if (!User.IsInRole("Administrador"))//no soy admin
-                {
-                    vista = nameof(Perfil);//solo puedo ver mi perfil
-                    var usuarioActual = repo.ObtenerPorEmail(User.Identity.Name);
-                    if (usuarioActual.Id != id)//si no es admin, solo puede modificarse él mismo
-                        return View("Denied");
-                        //return RedirectToAction(nameof(Index), "Home");
-                }
-                // TODO: Add update logic here
+                var sessionUser = repo.ObtenerPorEmail(User.Identity.Name);
 
-                return RedirectToAction(vista);
+                if (u.Id == 0) // significa que viene desde /Usuarios/Perfil y se quiere editar a sí mismo
+                {
+                    u.Id = sessionUser.Id; //Le asigno al binding el Id de la sesión
+                }
+
+                // Ahora busco el user que se intenta editar
+                var userToEdit = repo.ObtenerPorId(u.Id);
+
+                // Chequeo que el usuario exista (medio al pedo)
+                if (userToEdit == null)
+                {
+                    TempData["msg"] = "No se pudo comprobar el usuario. Intente nuevamente.";
+                    return RedirectToAction("Denied", "Home");
+                }
+
+                // Se chequea que si no es administrador, esté editando su perfil
+                if (!User.IsInRole("Administrador"))
+                {
+                    // Si el NO empleado está intentando editar un user con un id
+                    // distinto al propio, o si está intentando mandar un value para
+                    // el atributo Rol, es pateado al page "Denied"
+                    if (sessionUser.Id != u.Id || u.Rol > 0)
+                        return RedirectToAction("Denied", "Home");
+                }
+
+
+                // TODO: Aplicar lógica para modificar usuario
+                // Ojo que admin puede modificar Roles. Empleado NO.
+                // Empleado solo modifica desde /Usuarios/Perfil
+
+                if (u.Rol > 0)
+                {
+                    editRol = true; // Bandera para el repo
+                }
+
+                if (u.AvatarFile != null)
+                {
+                    string wwwPath = environment.WebRootPath; // ruta raíz del servidor
+                    string pathUploads = Path.Combine(wwwPath, "Uploads");
+
+                    if (!Directory.Exists(pathUploads))
+                    {
+                        Directory.CreateDirectory(pathUploads);
+                    }
+
+                    //Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
+
+                    string fileName = "avatar_" + u.Id + Path.GetExtension(u.AvatarFile.FileName);
+                    string avatarFullPath = Path.Combine(pathUploads, fileName);
+
+                    using (FileStream stream = new FileStream(avatarFullPath, FileMode.Create))
+                    {
+                        u.AvatarFile.CopyTo(stream);
+
+                        // Si todo fue bien, revalidamos ruta en el usuario y marcamos bandera
+                        u.Avatar = Path.Combine("Uploads", fileName);
+                        editAvatar = true;
+                    }
+                }
+
+                var res = repo.Update(u, editRol, editAvatar);
+
+                if (res > 0)
+                {
+                    TempData["msg"] = "¡Usuario actualizado!";
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    TempData["msg"] = "No se actualizaron datos. Intente nuevamente.";
+                    return Redirect(returnUrl);
+                }
+
+
             }
             catch (Exception ex)
             {//colocar breakpoints en la siguiente línea por si algo falla
-                throw;
+                throw ex;
             }
         }
+
+
+        // GET: Usuarios/EditPass/{id}
+        [Authorize]
+        public ActionResult EditPass(int id)
+        {
+            try
+            {
+                var sessionUser = repo.ObtenerPorEmail(User.Identity.Name);
+
+                // Si pasa lo siguiente, es admin o es un empleado
+                // que quiere editar su propia contraseña
+                if (!User.IsInRole("Administrador") && id != sessionUser.Id)
+                {
+                    return RedirectToAction("Denied", "Home");
+                }
+
+                var userToEdit = repo.ObtenerPorId(id);
+                if (userToEdit != null)
+                {
+                    ViewBag.Usuario = userToEdit;
+                    return View();
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró usuario. Intente Nuevamente";
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        // POST: Usuarios/EditPass/{id}
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditPass(int id, UsuarioPassEdit p)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var sessionUser = repo.ObtenerPorEmail(User.Identity.Name);
+                    var userToEdit = repo.ObtenerPorId(id);
+
+                    if (userToEdit == null)
+                    {
+                        // El usuario a editar no existe, se termina la cosa
+                        TempData["msg"] = "No se encontró el usuario. Intente Nuevamente.";
+                        return Redirect(Request.Headers["referer"].FirstOrDefault());
+                    }
+
+                    if (!User.IsInRole("Administrador") && sessionUser.Id != id)
+                    {
+                        return RedirectToAction("Denied", "Home");
+                    }
+
+                    // Acá ya podemos dejar de revisar autorización y cambiar la contraseña
+                    string oldPassHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                           password: p.OldPass,
+                           salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                           prf: KeyDerivationPrf.HMACSHA1,
+                           iterationCount: 1000,
+                           numBytesRequested: 256 / 8));
+
+                    if (oldPassHashed != userToEdit.Clave)
+                    {
+                        TempData["msg"] = "La contraseña antigua no es válida";
+                        return RedirectToAction(nameof(EditPass), new { id = id});
+                    }
+
+                    string newPassHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                           password: p.NewPass,
+                           salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                           prf: KeyDerivationPrf.HMACSHA1,
+                           iterationCount: 1000,
+                           numBytesRequested: 256 / 8));
+
+                    var res = repo.UpdatePass(id, newPassHashed);
+
+                    if (res > 0)
+                    {
+                        TempData["msg"] = "¡Contraseña actualizada!";
+                        return Redirect(Request.Headers["referer"].FirstOrDefault());
+                    }
+                    else
+                    {
+                        TempData["msg"] = "No se pudo cambiar contraseña. Intente nuevamente.";
+                        return RedirectToAction(nameof(EditPass), new { id = id});
+                    }
+
+                }
+                else
+                {
+                    TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    return RedirectToAction(nameof(EditPass), new { id = id });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
 
         // GET: Usuarios/Delete/5
         [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                var u = repo.ObtenerPorId(id);
+                if (u != null)
+                {
+                    return View(u);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró el usuario";
+                    return RedirectToAction(nameof(Delete), new { id = id });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
         }
 
         // POST: Usuarios/Delete/5
@@ -166,12 +421,22 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 // TODO: Add delete logic here
+                var res = repo.Baja(id);
+                if (res > 0)
+                {
+                    TempData["msg"] = "¡Usuario eliminado!";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["msg"] = "No se eliminó al usuario. Intnte nuevamente.";
+                    return RedirectToAction(nameof(Delete));
+                }
 
-                return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                throw e;
             }
         }
 
@@ -319,9 +584,18 @@ namespace InmobiliariaAlbornoz.Controllers
         [Route("salir", Name = "logout")]
         public async Task<ActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            try
+            {
+                await HttpContext.SignOutAsync(
+    CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
         }
     }
 }

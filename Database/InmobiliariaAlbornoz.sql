@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 21-09-2021 a las 06:56:25
+-- Tiempo de generación: 22-09-2021 a las 06:19:07
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -197,9 +197,8 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 --
 
 INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `AvatarUrl`, `Email`, `Clave`, `Rol`) VALUES
-(1, 'Ezequiel', 'Albornoz', NULL, 'eze@correo.com', 'GlrdpnLh77+eJQu0YICaF//xxolEqsY44HoghCYfHEI=', 2),
-(2, 'Mario', 'Avaca', NULL, 'mario@correo.com', 'JBrO+Xjqu3sRcGE/ykDEwx018NDGa9uQbZqaJdFPjs8=', 3),
-(3, 'Spider', 'Pig', '/Uploads\\avatar_3.jpg', 'piggy@correo.com', '36zg4LqQrmqzRNhRj0Hyxli1ua8j2hub+W0yslJFP8o=', 3);
+(1, 'Franco Ezequiel', 'Albornoz', 'Uploads\\avatar_1.jpg', 'eze@correo.com', 'zEpzXVsPwINgx5aDrV5lHErqXPYSc4yX1qyFCnnnkCA=', 2),
+(2, 'Mario Raúl', 'Avaca', 'Uploads\\avatar_2.png', 'mario@correo.com', 'HkI7YPF9fBrL9AFDk9bK06u30onwXaY6qeLndal0GZQ=', 3);
 
 --
 -- Restricciones para tablas volcadas

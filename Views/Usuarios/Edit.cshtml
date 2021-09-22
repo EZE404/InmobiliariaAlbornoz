@@ -4,12 +4,46 @@
     ViewData["Title"] = "Editar Usuario";
 }
 
-<h1>Editar Usuario</h1>
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-3">
+        <h1>Editar</h1>
+    </div>
+    <div class="col-sm-1">
+        @if (String.IsNullOrEmpty(Model.Avatar))
+        {
+            <img src="~/media/img/avatar.png" height="50" />
+        }
+        else
+        {
+            <img src=@("/"+Model.Avatar) height="50" />
+        }
+    </div>
+</div>
+
+
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
@@ -27,8 +61,8 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AvatarFile" class="control-label"></label>
-                <input asp-for="AvatarFile" class="form-control-file" />
+                <label asp-for="AvatarFile">Seleccione una imagen de perfil</label>
+                <input type="file" name="AvatarFile" class="form-control-file" />
                 <span asp-validation-for="AvatarFile" class="text-danger"></span>
             </div>
             @if (User.IsInRole("Administrador"))
@@ -52,20 +86,37 @@
                 </div>
             }
 
-        <div class="form-group">
-            <input type="submit" value="Guardar" class="btn btn-primary" />
-            <a class="btn btn-warning" asp-controller="Usuarios" asp-action="EditPass" asp-route-id="@Model.Id">
-                Cambiar Clave
-            </a>
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a class="btn btn-warning" asp-controller="Usuarios" asp-action="EditPass" asp-route-id="@Model.Id">
+                    Cambiar Clave
+                </a>
+            </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Volver a Usuarios</a>
+
 </div>
 
+<hr />
+@if (!String.IsNullOrEmpty(TempData["returnUrl"].ToString()))
+{
+<div class="row">
+    <div class="col-sm-2">
+        <a class="btn btn-link" href="@TempData["returnUrl"].ToString()">
+            <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Volver
+        </a>
+    </div>
+    @if (User.IsInRole("Administrador"))
+    {
+        <div class="col-sm-2">
+            <a class="btn btn-link" asp-action="Index">Lista de Usuarios</a>
+        </div>
+    }
+</div>
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

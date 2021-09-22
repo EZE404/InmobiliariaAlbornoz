@@ -190,5 +190,116 @@ namespace InmobiliariaAlbornoz.Data
 			}
 			return e;
 		}
-	}
+
+        public int Update(Usuario u, bool editRol, bool editAvatar)
+        {
+			int res = -1;
+			string sql;
+			int flag = 0;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+				if (!editRol && !editAvatar)
+				{
+					sql = @"UPDATE Usuario SET Nombre = @nombre,
+						Apellido = @apellido, Email = @email 
+						WHERE Id = @id ;";
+				}
+				else if (editRol && !editAvatar)
+				{
+					sql = @"UPDATE Usuario SET Nombre = @nombre, 
+						Apellido = @apellido, Email = @email, 
+						Rol = @rol WHERE Id = @id ;";
+					flag = 1;
+				}
+				else if (!editRol && editAvatar)
+				{
+					sql = @"UPDATE Usuario SET Nombre = @nombre,
+						Apellido = @apellido, Email = @email, 
+						AvatarUrl = @avatar WHERE Id = @id ;";
+					flag = 2;
+				}
+				else
+				{
+					sql = @"UPDATE Usuario SET Nombre = @nombre, 
+						Apellido = @apellido, Email = @email, 
+						Rol = @rol, AvatarUrl = @avatar 
+						WHERE Id = @id ;";
+					flag = 3;
+				}
+
+				using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    switch (flag)
+                    {
+						case 0:
+                            {
+								comm.Parameters.AddWithValue("@id", u.Id);
+								comm.Parameters.AddWithValue("@nombre", u.Nombre);
+								comm.Parameters.AddWithValue("@apellido", u.Apellido);
+								comm.Parameters.AddWithValue("@email", u.Email);
+							}
+							break;
+
+						case 1:
+							{
+								comm.Parameters.AddWithValue("@id", u.Id);
+								comm.Parameters.AddWithValue("@nombre", u.Nombre);
+								comm.Parameters.AddWithValue("@apellido", u.Apellido);
+								comm.Parameters.AddWithValue("@email", u.Email);
+								comm.Parameters.AddWithValue("@rol", u.Rol);
+							}
+							break;
+
+						case 2:
+							{
+								comm.Parameters.AddWithValue("@id", u.Id);
+								comm.Parameters.AddWithValue("@nombre", u.Nombre);
+								comm.Parameters.AddWithValue("@apellido", u.Apellido);
+								comm.Parameters.AddWithValue("@email", u.Email);
+								comm.Parameters.AddWithValue("@avatar", u.Avatar);
+							}
+							break;
+
+						case 3:
+							{
+								comm.Parameters.AddWithValue("@id", u.Id);
+								comm.Parameters.AddWithValue("@nombre", u.Nombre);
+								comm.Parameters.AddWithValue("@apellido", u.Apellido);
+								comm.Parameters.AddWithValue("@email", u.Email);
+								comm.Parameters.AddWithValue("@rol", u.Rol);
+								comm.Parameters.AddWithValue("@avatar", u.Avatar);
+							}
+							break;
+                    }
+
+					conn.Open();
+					res = comm.ExecuteNonQuery();
+					conn.Close();
+                }
+			}
+			return res;
+        }
+
+        public int UpdatePass(int id, string newPassHashed)
+        {
+			int res = -1;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+				string sql = @"UPDATE Usuario SET Clave = @clave WHERE Id = @id";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+					comm.Parameters.AddWithValue("@id", id);
+					comm.Parameters.AddWithValue("@clave", newPassHashed);
+
+					conn.Open();
+					res = comm.ExecuteNonQuery();
+					conn.Close();
+                }
+            }
+			return res;
+        }
+    }
 }

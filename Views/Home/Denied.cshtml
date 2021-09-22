@@ -17,19 +17,15 @@
     </div>
 }
 
-<center>
-    <font face="Arial">
-        <b>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="alert-warning">
             No tienes privilegios para la acción que intentas<br><br>
 
-            Volviendo a inicio...
-            <form>
-                <input type="text" size="3" id="timer" name="redirect2" value="5">
-            </form>
-            segundos
-        </b>
-    </font>
-</center>
+            Volviendo a inicio en <span id="timer">5</span> segundos
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -38,7 +34,7 @@
     function countredirect() {
         if (currentsecond != 1) {
             currentsecond -= 1
-            document.getElementById('timer').value = currentsecond;
+            document.getElementById('timer').innerText = currentsecond;
         }
         else {
             window.location = targetURL;
