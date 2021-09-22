@@ -65,8 +65,12 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" onsubmit="return confirmar()">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index">Lista de Usuarios</a>
     </form>
+
+    <script type="text/javascript">
+        function confirmar() { return confirm("Enviar cambios") }
+    </script>
 </div>

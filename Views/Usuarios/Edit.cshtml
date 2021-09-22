@@ -19,31 +19,29 @@
 }
 
 
-
-
+<h1>Editar Usuario</h1>
+<hr />
 
 <div class="row">
-    <div class="col-sm-3">
-        <h1>Editar</h1>
-    </div>
-    <div class="col-sm-1">
+    <div class="col-sm-4 text-center">
         @if (String.IsNullOrEmpty(Model.Avatar))
         {
-            <img src="~/media/img/avatar.png" height="50" />
+            <img src="/media/img/avatar.png" width="200" />
+
         }
         else
         {
-            <img src=@("/"+Model.Avatar) height="50" />
+            <img src="@("/"+Model.Avatar)" width="200" />
         }
+        <br />
+        <p class="lead">@(Model.Email)</p>
+        <hr />
     </div>
 </div>
 
-
-
-<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+        <form asp-action="Edit" enctype="multipart/form-data" onsubmit="return confirmar()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
@@ -117,6 +115,11 @@
     }
 </div>
 }
+
+<script type="text/javascript">
+    function confirmar() { return confirm("Enviar cambios") }
+</script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

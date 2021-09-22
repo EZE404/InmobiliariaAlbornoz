@@ -23,6 +23,19 @@
 <div>
     <h4>Usuario</h4>
     <hr />
+    <div class="row">
+        <div class="col-sm-4 text-center">
+            @if (String.IsNullOrEmpty(Model.Avatar))
+            {
+                <img src="~/media/img/avatar.png" width="200" />
+            }
+            else
+            {
+                <img src=@("/"+Model.Avatar) width="200" />
+            }
+            <hr />
+        </div>
+    </div>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
@@ -48,22 +61,9 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RolNombre)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Avatar)
-        </dt>
-        <dd class="col-sm-10">
-            @if (String.IsNullOrEmpty(Model.Avatar))
-            {
-                <img src="~/media/img/avatar.png" height="40" />
-            }
-            else
-            {
-                <img src=@("/"+Model.Avatar) height="40" />
-            }
-        </dd>
-
     </dl>
 </div>
+<hr />
 <div>
     @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
     <a asp-action="Index">Lista de Usuarios</a>

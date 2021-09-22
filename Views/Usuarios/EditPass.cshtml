@@ -24,14 +24,24 @@
 <hr />
 <div class="row">
     <div class="col-sm-4 text-center">
-        <img src="@("/"+u.Avatar)" width="200" /><br /><p class="lead">@(u.Email)</p>
+        @if (String.IsNullOrEmpty(u.Avatar))
+        {
+            <img src="/media/img/avatar.png" width="200" />
+
+        }
+        else
+        {
+            <img src="@("/"+u.Avatar)" width="200" />
+        }
+        <br />
+        <p class="lead">@(u.Email)</p>
         <hr />
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditPass" asp-route-id="@u.Id">
+        <form asp-action="EditPass" asp-route-id="@u.Id" onsubmit="return confirmar()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="OldPass" class="control-label"></label>
@@ -53,6 +63,10 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript">
+    function confirmar() { return confirm("Enviar cambios") }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

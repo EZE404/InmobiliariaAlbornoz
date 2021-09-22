@@ -21,18 +21,19 @@ namespace InmobiliariaAlbornoz.Models
         [Key]
         [Display(Name = "Código")]
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo requerido")]
         public string Nombre { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo requerido")]
         public string Apellido { get; set; }
-        [Required, EmailAddress]
+        [Required(ErrorMessage = "Campo requerido"), EmailAddress]
         public string Email { get; set; }
-        [Required, DataType(DataType.Password)]
+        [Required(ErrorMessage = "Campo requerido"), DataType(DataType.Password)]
         public string Clave { get; set; }
         public string Avatar { get; set; }
         [NotMapped]//Para EF
         [Display(Name ="Imagen de perfil")]
         public IFormFile AvatarFile { get; set; }
+        [Required(ErrorMessage = "Campo requerido")]
         public int Rol { get; set; }
         [NotMapped]//Para EF
         [Display(Name ="Rol")]
