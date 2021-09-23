@@ -8,19 +8,29 @@ namespace InmobiliariaAlbornoz.Models
     {
         [Display(Name = "Código")]
         public int Id { get; set; }
-        [Display(Name = "Dirección"), Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [MinLength(5)]
+        [Display(Name = "Dirección")]
         public string Direccion { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Tipo { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Uso { get; set; }
-        [Display(Name = "Cantidad de Ambientes"), Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "N° Ambientes")]
         public int Ambientes { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
         public decimal Precio { get; set; }
-        [Required]
+
         public bool Disponible { get; set; }
-        [Display(Name = "Propietario"), Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Propietario")]
         public int IdPropietario { get; set; }
 
         public Propietario Propietario { get; set; }

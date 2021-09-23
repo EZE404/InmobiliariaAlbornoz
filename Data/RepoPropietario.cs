@@ -45,9 +45,25 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"DELETE FROM Propietario WHERE Id = @id ;";
+                string consulta = @"SELECT DISTINCT i.IdPropietario FROM inmueble i 
+                                    WHERE i.IdPropietario = @id;";
 
-                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                using (MySqlCommand comm = new MySqlCommand(consulta, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        conn.Close();
+                        return res;
+                    }
+                    conn.Close();
+                }
+
+                string borrar = @"DELETE FROM Propietario WHERE Id = @id ;";
+
+                using (MySqlCommand comm = new MySqlCommand(borrar, conn))
                 {
                     comm.Parameters.AddWithValue("@id", id);
                     conn.Open();

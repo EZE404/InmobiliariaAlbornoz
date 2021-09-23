@@ -18,13 +18,13 @@ namespace InmobiliariaAlbornoz.Models
         [Required(ErrorMessage = "La fecha de pago es requerida")]
         [Display(Name ="Fecha de pago")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime Fecha { get; set; }
 
         [Required(ErrorMessage = "La fecha correspondiente al pago es requerida")]
         [Display(Name = "Fecha Correpondiente")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime FechaCorrespondiente { get; set; }
 
 

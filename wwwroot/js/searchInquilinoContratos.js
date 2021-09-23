@@ -81,6 +81,6 @@ async function searchInquilinoContratos() {
         }
 
     } catch (error) {
-        p_aviso.innerText = error;
+        p_aviso.innerText = "Debe ingresar un dni válido";
     }
 }

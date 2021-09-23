@@ -20,7 +20,8 @@ namespace InmobiliariaAlbornoz.Data
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"UPDATE Pago
-                               SET FechaCorrespondiente = @fecha_cor , Monto = @monto , Tipo = @tipo 
+                               SET FechaCorrespondiente = @fecha_cor , Monto = @monto , 
+                               Tipo = @tipo, Anulado = @anulado 
                                WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -29,6 +30,7 @@ namespace InmobiliariaAlbornoz.Data
                     comm.Parameters.AddWithValue("@monto", p.Monto);
                     comm.Parameters.AddWithValue("@tipo", p.Tipo);
                     comm.Parameters.AddWithValue("@id", p.Id);
+                    comm.Parameters.AddWithValue("@anulado", p.Anulado);
 
 
                     conn.Open();
@@ -43,7 +45,7 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"UPDATE Pago SET Anulado = 1 WHERE Id = @id ;";
+                string sql = @"DELETE FROM Pago WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -62,7 +64,7 @@ namespace InmobiliariaAlbornoz.Data
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 string sql = @"SELECT p.Id, p.IdContrato, p.Fecha, p.FechaCorrespondiente, 
-                                p.Monto, p.Tipo FROM pago p
+                                p.Monto, p.Tipo, p.Anulado FROM pago p
                                 WHERE p.Id = @id;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -85,8 +87,8 @@ namespace InmobiliariaAlbornoz.Data
                         p.FechaCorrespondiente = reader.GetDateTime(3);
                         p.Monto = reader.GetDecimal(4);
                         p.Tipo = reader.GetString(5);
+                        p.Anulado = reader.GetBoolean(6);
                         p.Contrato = c;
-
                     }
 
                     conn.Close();

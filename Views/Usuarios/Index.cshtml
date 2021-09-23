@@ -19,17 +19,15 @@
 }
 
 <h1>Lista de Usuarios</h1>
-
+<hr />
 <p>
-    <a asp-action="Create">Crear nuevo Usuario</a>
+    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<hr />
+<table class="table" id="table_id">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th width="42px" style="padding-left: 1px; padding-right: 1px"></th>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
@@ -48,38 +46,45 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @if (String.IsNullOrEmpty(item.Avatar))
-                {
-                    <img src="/media/img/avatar.png" width="40" alt="Imagen de usuario" />
-                }
-                else
-                {
-                    <img src="@item.Avatar" width="40" alt="Imagen de usuario" />
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RolNombre)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+            <tr>
+
+                <td class="text-center">
+                    @if (String.IsNullOrEmpty(item.Avatar))
+                    {
+                        <img src="/media/img/avatar.png" height="60" alt="Imagen de usuario" />
+                    }
+                    else
+                    {
+                        <img src="@item.Avatar" height="60" alt="Imagen de usuario" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RolNombre)
+                </td>
+                <td>
+                    <div>
+                        <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+
+                    </div>
+                    <div>
+                        <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+
+                    </div>
+                    <div>
+                        <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+
+                    </div>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

@@ -22,7 +22,7 @@ namespace InmobiliariaAlbornoz.Data
                 string sql = @"UPDATE Contrato
                             SET IdInmueble = @id_inmueble , IdInquilino = @id_inquilino , Desde = @desde , 
                             Hasta = @hasta , DniGarante = @dni_garante , NombreGarante = @nombre_garante, 
-                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante 
+                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante, Valido = @valido, 
                             WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
@@ -35,6 +35,7 @@ namespace InmobiliariaAlbornoz.Data
                     comm.Parameters.AddWithValue("@nombre_garante", c.NombreGarante);
                     comm.Parameters.AddWithValue("@tel_garante", c.TelefonoGarante);
                     comm.Parameters.AddWithValue("@email_garante", c.EmailGarante);
+                    comm.Parameters.AddWithValue("valido", c.Valido);
                     comm.Parameters.AddWithValue("@id", c.Id);
 
 
@@ -50,7 +51,7 @@ namespace InmobiliariaAlbornoz.Data
             int res = -1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string sql = @"UPDATE Contrato SET Valido = 0 WHERE Id = @id ;";
+                string sql = @"DELETE FROM Contrato WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
@@ -94,6 +95,39 @@ namespace InmobiliariaAlbornoz.Data
             return res;
         }
 
+        public bool CheckDates(int idInmueble, DateTime desde, DateTime hasta, int idContrato)
+        {
+            bool res = true;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT c.* FROM contrato c
+                            WHERE (c.Desde BETWEEN @desde AND @hasta
+                            OR c.Hasta BETWEEN @desde AND @hasta)
+                            AND c.Valido = 1 AND c.IdInmueble = @id 
+                            AND c.Id != @idContrato;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@desde", desde);
+                    comm.Parameters.AddWithValue("@hasta", hasta);
+                    comm.Parameters.AddWithValue("@id", idInmueble);
+                    comm.Parameters.AddWithValue("@idContrato", idContrato);
+
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        res = false;
+                    }
+
+                    conn.Close();
+                }
+            }
+            return res;
+        }
+
         public Contrato Details(int id)
         {
             Contrato c = new Contrato();
@@ -103,7 +137,7 @@ namespace InmobiliariaAlbornoz.Data
                 string sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, 
                                 c.DniGarante, c.NombreGarante, c.TelefonoGarante, c.EmailGarante, c.Valido,
                                 i.IdPropietario, p.Nombre, 
-                                i2.Nombre
+                                i2.Nombre, i.Direccion 
                                 FROM Contrato c INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
                                 INNER JOIN Propietario p ON i.IdPropietario = p.Id 
                                 INNER JOIN Inquilino i2 ON c.IdInquilino = i2.Id 
@@ -127,6 +161,7 @@ namespace InmobiliariaAlbornoz.Data
                         Inmueble i = new Inmueble
                         {
                             Id = reader.GetInt32(1),
+                            Direccion = reader.GetString(13),
                             Propietario = p,
                         };
 

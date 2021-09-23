@@ -1,6 +1,7 @@
 ﻿using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
 using InmobiliariaAlbornoz.ModelsAux;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -61,24 +62,40 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: PagosController/Create
         public ActionResult Create(int id)
         {
-            if (id > 0)
+            try
             {
-                Contrato c = repoContrato.Details(id);
-
-                if (c.Id > 0)
+                if (id > 0) // Si es mayor a 0, viene desde Contrato (/pagos/create/idContrato)
                 {
+                    Contrato c = repoContrato.Details(id);
+                    if (c.Id == 0)
+                    {
+                        TempData["msg"] = "No se encontró el Contrato. Intente nuevamente.";
+                        return View();
+                    }
+
+                    if (!c.Valido)
+                    {
+                        TempData["msg"] = "No se puede cargar un pago a un contrato invalidado.";
+                        return View();
+                    }
+
                     ViewBag.Contrato = c;
                     return View();
                 }
+
+                return View(); // Sino, es que viene de "Crear nuevo" en Index de Pagos (/pagos/create)
             }
-            
-            return View();
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return View();
+            }
+
         }
 
         // GET: PagosController/Inquilino/{dni}
         public ActionResult Inquilino(string dni)
         {
-
             PagoCreate pc = new PagoCreate();
             try
             {
@@ -93,10 +110,10 @@ namespace InmobiliariaAlbornoz.Controllers
 
                 return Ok(pc); // { "Inquilino": { "Nombre":"Pepito", ... }, "Contratos":[{"IdINmueble": 8}, {}, {}] }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
-                throw e;
+                TempData["msg"] = "Ocurió un error. Intente nuevamente";
+                return RedirectToAction(nameof(Create));
             }
 
         }
@@ -140,7 +157,8 @@ namespace InmobiliariaAlbornoz.Controllers
                         TempData["msg"] = "El contrato indicado no está vigente o fue cancelado.";
                         return RedirectToAction(nameof(Create));
                     }
-                } else
+                }
+                else
                 {
                     TempData["msg"] = "Datos Inválidos. Intente nuevamente";
                     return RedirectToAction(nameof(Create));
@@ -149,6 +167,7 @@ namespace InmobiliariaAlbornoz.Controllers
             }
             catch
             {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente";
                 return View();
             }
         }
@@ -159,17 +178,21 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 Pago p = repo.Details(id);
-                if (p.Id > 0)
+                if (p.Id == 0)
                 {
-                    return View(p);
-                }
-                else
-                {
-                    TempData["msg"] = "El pago " + id + " no existe en la base de datos. Intente nuevamente";
+                    TempData["msg"] = "No se encontró el Pago. Intente nuevamente";
                     return RedirectToAction(nameof(Index));
                 }
+
+                if (p.Anulado)
+                {
+                    TempData["msg"] = "No se puede editar un pago anulado.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(p);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return RedirectToAction(nameof(Index));
@@ -185,6 +208,19 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var oldP = repo.Details(id);
+                    if (oldP.Id == 0)
+                    {
+                        TempData["msg"] = "No se encontró el Pago. Intente nuevamente.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    if (oldP.Anulado)
+                    {
+                        TempData["msg"] = "No se puede editar un pago anulado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     var res = repo.Edit(p);
                     if (res > 0)
                     {
@@ -203,7 +239,7 @@ namespace InmobiliariaAlbornoz.Controllers
                     return RedirectToAction(nameof(Edit), new { id = id});
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return RedirectToAction(nameof(Index));
@@ -211,6 +247,7 @@ namespace InmobiliariaAlbornoz.Controllers
         }
 
         // GET: PagosController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             try
@@ -226,32 +263,31 @@ namespace InmobiliariaAlbornoz.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // POST: PagosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-
-
             try
             {
                 var res = repo.Delete(id);
                 if (res > 0)
                 {
-                    TempData["msg"] = "Pago Anulado.";
+                    TempData["msg"] = "Pago eliminado.";
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     TempData["msg"] = "Pago no encontrado. Vuelva a Intentar.";
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Delete), new { id = id });
                 }
             }
             catch

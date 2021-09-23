@@ -4,12 +4,27 @@
     ViewData["Title"] = "Inquilinos";
 }
 
-<h1>Inquilinos</h1>
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
 
+<h1>Inquilinos</h1>
+<hr />
 <p>
-    <a asp-action="Create">Cargar Nuevo</a>
+    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<hr />
+<table class="table" id="table_id">
     <thead>
         <tr>
             <th>
@@ -25,23 +40,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dni)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                    <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

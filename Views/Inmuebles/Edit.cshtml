@@ -2,7 +2,21 @@
 
 @{
     ViewData["Title"] = "Editar Inmueble";
-    IList < Propietario > Propietarios = (List<Propietario>)ViewBag.Propietarios;
+    IList<Propietario> Propietarios = (List<Propietario>)ViewBag.Propietarios;
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 
 <h1>Editar</h1>
@@ -59,8 +73,11 @@
         </form>
     </div>
 </div>
-
+<hr />
 <div>
-    <a asp-action="Index">Volver a la Lista</a>
+    <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

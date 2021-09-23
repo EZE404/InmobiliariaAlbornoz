@@ -19,23 +19,24 @@
 }
 
 <h1>Pagos</h1>
-
+<hr />
 <p>
-    <a asp-action="Create">Nuevo pago</a>
+    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<hr />
+<table class="table" id="table_id">
     <thead>
         <tr>
-            <th>
+            <th width="40">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
-            <th>
+            <th width="40">
                 @Html.DisplayNameFor(model => model.IdContrato)
             </th>
-            <th>
+            <th width="100">
                 @Html.DisplayNameFor(model => model.Fecha)
             </th>
-            <th>
+            <th width="100">
                 @Html.DisplayNameFor(model => model.FechaCorrespondiente)
             </th>
             <th>
@@ -44,28 +45,28 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tipo)
             </th>
-            <th>
+            <th width="40">
                 @Html.DisplayNameFor(model => model.Anulado)
             </th>
-            <th></th>
+            <th width="70"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
         <tr>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
-            <td>
+            <td class="text-center">
                 <a asp-controller="Contratos" asp-action="Details" asp-route-id="@item.IdContrato">
                     @Html.DisplayFor(modelItem => item.IdContrato)
                 </a>
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.FechaCorrespondiente)
             </td>
             <td>
@@ -74,13 +75,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Tipo)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Anulado)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Anular", "Delete", new { id = item.Id })
+                @if (!item.Anulado)
+                {
+                    <div>
+                        <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                    </div>
+                }
+                <div>
+                    <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                </div>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <div>
+                        <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                    </div>
+                }
             </td>
         </tr>
         }

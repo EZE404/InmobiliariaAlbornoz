@@ -4,87 +4,102 @@
     ViewData["Title"] = "Eliminar Contrato";
 }
 
-@if (ViewData["Error"] != null)
+@if (TempData["msg"] != null)
 {
-    <p class="alert-warning">@ViewData["Error"]</p>
-}
-
-@if (Model != null)
-{
-    <h1>Eliminar</h1>
-
-    <h3>¿Estás seguro de eliminar el siguiente contrato de la Base de Datos?</h3>
-    <div>
-        <h4>Contrato</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Id)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Id)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.IdInmueble)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.IdInmueble)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Inmueble.Propietario)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Inmueble.Propietario.Nombre)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Inquilino)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Inquilino.Nombre)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Desde)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Desde)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Hasta)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Hasta)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.DniGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.DniGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.NombreGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.NombreGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.TelefonoGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.TelefonoGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.EmailGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.EmailGarante)
-            </dd>
-        </dl>
-
-        <form asp-action="Delete">
-            <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-            <a asp-action="Index">Volver a la Lista</a>
-        </form>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
     </div>
 }
 
+
+<h1>Eliminar</h1>
+<hr />
+<h4>¿Estás seguro de eliminar el siguiente contrato? Esta acción es irreversible y se eliminarán todos sus pagos asociados.</h4>
+<hr />
+<div>
+    <h4>Contrato</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.IdInmueble)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.IdInmueble)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Inmueble.Propietario)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Inmueble.Propietario.Nombre)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Inquilino)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Inquilino.Nombre)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Desde)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Desde)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Hasta)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Hasta)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.DniGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DniGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.NombreGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.NombreGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.TelefonoGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.TelefonoGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.EmailGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.EmailGarante)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" onsubmit="return confirmar()">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+    </form>
+</div>
+
+<hr />
+<div>
+    <a class="btn btn-link" asp-action="Index">Lista de Contratos</a>
+</div>
+
+<script type="text/javascript">
+        function confirmar() { return confirm("¿Eliminar Contrato?") }
+</script>
 

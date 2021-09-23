@@ -1,5 +1,6 @@
 ﻿using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -46,12 +47,20 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 var c = repo.Details(id);
-                return View(c);
+                if (c.Id > 0)
+                {
+                    return View(c);
+                }
+                else
+                {
+                    TempData[""] = "No se encontró Contrato. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                ViewData["Error"] = e.Message;
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -129,17 +138,41 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 var c = repo.Details(id);
-                ViewBag.Inmuebles = repoInmueble.All();
-                ViewBag.Inquilinos = repoInquilino.All();
+                if (c.Id <= 0)
+                {
+                    TempData["msg"] = "No se encontró Contrato. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (!c.Valido)
+                {
+                    TempData["msg"] = "No se puede editar un Contrato invalidado.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var inmuebles = repoInmueble.All();
+                if (inmuebles.Count == 0)
+                {
+                    TempData["msg"] = "No se pudo obtener lista de Inmuebles. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var inquilinos = repoInquilino.All();
+                if (inquilinos.Count == 0)
+                {
+                    TempData["msg"] = "No se pudo obtener lista de Inquilinos. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewBag.Inmuebles = inmuebles;
+                ViewBag.Inquilinos = inquilinos;
                 return View(c);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                ViewData["Error"] = "Ocurrió un error al recuperar inmuebles e/o inquilinos: " + e.Message;
-                return View();
-
+                ViewData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
-
         }
 
         // POST: ContratosController/Edit/5
@@ -149,36 +182,69 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    return RedirectToAction(nameof(Edit), new { id = id });
+                }
+
                 c.Id = id;
+
+                var datesAreOk = repoContrato.CheckDates(c.IdInmueble, c.Desde, c.Hasta, c.Id);
+                if (!datesAreOk)
+                {
+                    TempData["msg"] = "El rango entre fechas ingresadas no está disponible.";
+                    return RedirectToAction(nameof(Edit), new { id = id });
+                }
+
                 var res = repo.Edit(c);
                 if (res > 0)
                 {
+                    TempData["msg"] = "Cambios guardados.";
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    Exception e = new Exception("No se guardaron cambios. Intente nuevamente.");
-                    throw e;
+                    TempData["msg"] = "No se guardaron cambios. Intente nuevamente.";
+                    return RedirectToAction(nameof(Edit), new { id = id });
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                TempData["Error"] = e.Message;
-                return RedirectToAction(nameof(Edit), id);
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Edit), new { id = id });
             }
         }
 
         // GET: ContratosController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
-            //FALTA UN TRY CATCH?
-            Contrato c = repo.Details(id);
-            return View(c);
+            try
+            {
+                Contrato c = repo.Details(id);
+                if (c.Id > 0)
+                {
+                    return View(c);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró Contrato. Intente nuevamente";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         // POST: ContratosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
@@ -186,18 +252,19 @@ namespace InmobiliariaAlbornoz.Controllers
                 var res = repo.Delete(id);
                 if (res > 0)
                 {
+                    TempData["msg"] = "Contrato eliminado de la base de datos.";
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    Exception e = new Exception("Fallo al guardar cambios. Intente nuevamente.");
-                    throw e;
+                    Exception e = new Exception("No se eliminó Contrato. Intente nuevamente.");
+                    return RedirectToAction(nameof(Delete), new { id = id });
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                ViewData["Error"] = e.Message;
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
     }

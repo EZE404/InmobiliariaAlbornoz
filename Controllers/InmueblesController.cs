@@ -43,21 +43,37 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 var i = repo.ById(id);
-                return View(i);
+                if (i.Id > 0)
+                {
+                    return View(i);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró Inmueble. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                 // TODO
-                Debug.WriteLine(ex.ToString());
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // GET: Inmueble/Create
         public ActionResult Create()
         {
-            ViewBag.Propietarios = repoPropietario.All();
-            return View();
+            try
+            {
+                ViewBag.Propietarios = repoPropietario.All();
+                return View();
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         // POST: Inmueble/Create
@@ -67,22 +83,30 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                var res = repo.Put(i);
-                if (res > 0)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var res = repo.Put(i);
+                    if (res > 0)
+                    {
+                        TempData["msg"] = "Inmueble cargado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["msg"] = "No se cargó el inmueble. Intente nuevamente.";
+                        return View();
+                    }
                 }
                 else
                 {
-                    Exception e = new Exception("No se cargó el inmueble. Intente de nuevo");
-                    throw e;
+                    TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    return View();
                 }
-
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                TempData["Error"] = e.Message;
-                return RedirectToAction(nameof(Create));
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente";
+                return View();
             }
         }
 
@@ -92,16 +116,29 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 var propietarios = repoPropietario.All();
-                ViewBag.Propietarios = propietarios;
-                var i = repo.ById(id);
-                return View(i);            
-            }
-            catch (Exception ex)
-            {
-                 // TODO
-                Debug.WriteLine(ex.ToString());
-                return View();
+                if (propietarios.Count == 0)
+                {
+                    TempData["msg"] = "No se pudo obtener la lista de propietarios. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
 
+                ViewBag.Propietarios = propietarios;
+                
+                var i = repo.ById(id);
+                if (i.Id > 0)
+                {
+                    return View(i);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró Inmueble. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -112,15 +149,33 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                i.Id = id;
-                var res = repo.Edit(i);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    // TODO: Add update logic here
+                    i.Id = id;
+                    var res = repo.Edit(i);
+                    if (res > 0)
+                    {
+                        TempData["msg"] = "Cambios guardados.";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+                    else
+                    {
+                        TempData["msg"] = "No se guardaron los cambios. Intente nuevamente.";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+                }
+                else
+                {
+                    TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    return RedirectToAction(nameof(Edit), new { id = id });
+                }
+
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                Debug.WriteLine(ex.ToString());
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 

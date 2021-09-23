@@ -11,16 +11,22 @@ namespace InmobiliariaAlbornoz.Models
         [Display(Name  = "Índice")]
         public int Id { get; set; }
 
-        [Display(Name = "Inmueble"), Required]
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Inmueble")]
         public int IdInmueble { get; set; }
 
-        [Display(Name = "Inquilino"), Required]
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Inquilino")]
         public int IdInquilino { get; set; }
 
-        [Display(Name = "Fecha de Inicio"), Required]
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Fecha de Inicio")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime Desde { get; set; }
 
-        [Display(Name = "Fecha de Vencimiento"), Required]
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Fecha de Vencimiento")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime Hasta { get; set; }
 
         [Display(Name = "Válido")]
@@ -31,13 +37,26 @@ namespace InmobiliariaAlbornoz.Models
         public Inquilino Inquilino { get; set; }
 
         // Garante
-        [Display(Name = "Dni del Garante"), Required]
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Dni del Garante")]
+        [MinLength(8), MaxLength(16)]
         public string DniGarante { get; set; }
-        [Display(Name = "Nombre del Garante"), Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Nombre del Garante")]
+        [MinLength(10)]
         public string NombreGarante { get; set; }
-        [Display(Name = "Teléfono del Garante"), Required]
+
+        [Required(ErrorMessage = "Campo obligatorio")]
+        [Display(Name = "Teléfono del Garante")]
+        [DataType(DataType.PhoneNumber)]
+        [MinLength(8), MaxLength(16)]
         public string TelefonoGarante { get; set; }
+
+        [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Email del Garante")]
+        [DataType(DataType.EmailAddress)]
+        [MinLength(5)]
         public string EmailGarante { get; set; }
     }
 }

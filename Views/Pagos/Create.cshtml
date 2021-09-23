@@ -30,8 +30,8 @@
             <form asp-action="Create" asp-route-id="@c.Id">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <h6>Pago para Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h6>
-
+                <h5>Contrato @(c.Id) para Inmueble ubicado en @(c.Inmueble.Direccion)</h5>
+                <hr />
                 <div class="form-group">
                     <label asp-for="FechaCorrespondiente" class="control-label"></label>
                     <input asp-for="FechaCorrespondiente" class="form-control" />
@@ -55,14 +55,14 @@
         }
         else
         {
-            <p class="alert-warning p-3" id="aviso"></p>
+            <p class="p-2" id="aviso"></p>
             <div class="row">
                 <div class="col-sm-8">
                     <label for="Inquilino" class="control-label" />
                     <input type="text" name="DniInquilino" id="DniInquilino" pattern="[0-9]+" class="form-control" placeholder="Ingrese DNI" />
                 </div>
                 <div class="col-sm-4">
-                    <button id="searchBtn" class="btn btn-secondary" onclick="searchInquilinoContratos()">Buscar</button>
+                    <button id="searchBtn" class="btn btn-info" onclick="searchInquilinoContratos()">Buscar</button>
                 </div>
             </div>
 
@@ -99,12 +99,11 @@
                 </div>
             </form>
         }
-
     </div>
 </div>
-
+<hr />
 <div>
-    <a asp-action="Index">Volver a la Lista</a>
+    <a class="btn btn-link" asp-action="Index">Lista de pagos</a>
 </div>
 
 <script src="~/js/searchInquilinoContratos.js"></script>

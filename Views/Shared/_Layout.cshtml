@@ -7,7 +7,7 @@
     @* FONT AWESOME *@
     <script src="https://kit.fontawesome.com/700e9dba15.js" crossorigin="anonymous"></script>
     @* BOOTSTRAP *@
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.lux.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     @* DATATABLES *@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
@@ -18,7 +18,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inmobiliaria Albornoz</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/media/svg/logo.svg" width="60"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,28 +26,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Propietarios" asp-action="Index">Propietarios</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Propietarios" asp-action="Index">Propietarios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inquilinos" asp-action="Index">Inquilinos</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Inquilinos" asp-action="Index">Inquilinos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inmuebles" asp-action="Index">Inmuebles</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Inmuebles" asp-action="Index">Inmuebles</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Contratos" asp-action="Index">Contratos</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Contratos" asp-action="Index">Contratos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pagos" asp-action="Index">Pagos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="~/media/svg/der.svg" target="_blank">Diagrama ER</a>
+                            <a class="nav-link text-dark btn btn-secondary" asp-area="" asp-controller="Pagos" asp-action="Index">Pagos</a>
                         </li>
                     </ul>
                     @if (User.Identity.IsAuthenticated)
@@ -69,7 +66,7 @@
                     else
                     {
                         <div class="login-container">
-                            <a asp-controller="Usuarios" asp-action="Login" class="btn btn-outline-secondary active" role="button" aria-pressed="true">Ingresar</a>
+                            <a asp-controller="Usuarios" asp-action="Login" class="btn btn-primary" role="button" aria-pressed="true">Ingresar</a>
                         </div>
                     }
                 </div>

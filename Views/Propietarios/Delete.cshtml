@@ -1,7 +1,7 @@
-﻿@model InmobiliariaAlbornoz.Models.Inmueble
+﻿@model InmobiliariaAlbornoz.Models.Propietario
 
 @{
-    ViewData["Title"] = "Borrar Inmueble";
+    ViewData["Title"] = "Borrar Propietario";
 }
 
 @if (TempData["msg"] != null)
@@ -18,11 +18,12 @@
     </div>
 }
 
+
 <h1>Borrar</h1>
 
-<h3>¿Seguro que desea borrar?</h3>
+<h3>¿Está seguro que desea borrar?</h3>
 <div>
-    <h4>Inmueble</h4>
+    <h4>Propietario</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -32,56 +33,49 @@
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Dni)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dni)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaN)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FechaN)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Direccion)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Direccion)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
+            @Html.DisplayNameFor(model => model.Telefono)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
+            @Html.DisplayFor(model => model.Telefono)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Uso)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Uso)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ambientes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ambientes)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Disponible)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Disponible)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Propietario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Propietario.Nombre)
+            @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
 
-    <form asp-action="Delete">
-        <input type="submit" value="Borrar" class="btn btn-danger" />
+    <form asp-action="Delete" onsubmit="return confirmar()">
+        <input type="submit" value="Borrar" class="btn btn-danger" /> |
+        <a asp-action="Index">Lista de Propietarios</a>
     </form>
 </div>
 
-<hr />
-
-<div>
-    <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
-</div>
+<script type="text/javascript">
+        function confirmar() { return confirm("¿Borrar?") }
+</script>

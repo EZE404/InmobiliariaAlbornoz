@@ -20,15 +20,25 @@
 
 @if (Model != null && Model.Count() == 0)
 {
-    <p class="alert-warning">No hay contratos cargados en la Base de Datos</p>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>No hay contratos cargados en la Base de Datos</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 
 <h1>Contratos</h1>
-
+<hr />
 <p>
-    <a asp-action="Create">Cargar Nuevo</a>
+    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<hr />
+<table class="table" id="table_id">
     <thead>
         <tr>
             <th>
@@ -46,11 +56,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.NombreGarante)
             </th>
-            <th>
+            <th width="40">
                 @Html.DisplayNameFor(model => model.Valido)
             </th>
-
-            <th></th>
+            <th width="70"></th>
         </tr>
     </thead>
     <tbody>
@@ -58,31 +67,46 @@
         {
             @foreach (var item in Model)
             {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdInmueble)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Inquilino.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Desde)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hasta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreGarante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valido)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdInmueble)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inquilino.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Desde)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hasta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombreGarante)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Valido)
+                    </td>
+                    <td height="80">
+                        @if (item.Valido)
+                        {
+                            <div>
+                                <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                            </div>
+                            <div>
+                                <i class="fas fa-user-edit"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
+                            </div>
+                        }
+                        <div>
+                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                        </div>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <div>
+                                <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                            </div>
+                        }
+                    </td>
+                </tr>
             }
         }
 

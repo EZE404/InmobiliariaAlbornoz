@@ -4,17 +4,27 @@
     ViewData["Title"] = "Lista de Inmuebles";
 }
 
-@if (ViewData["Error"] != null)
+@if (TempData["msg"] != null)
 {
-    <p class="alert-warning">@ViewData["Error"]</p>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 
 <h1>Inmuebles</h1>
-
+<hr />
 <p>
-    <a asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
+    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
 </p>
-<table class="table">
+<hr />
+<table class="table" id="table_id">
     <thead>
         <tr>
 
@@ -25,15 +35,20 @@
                 @Html.DisplayNameFor(model => model.Tipo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ambientes)
+                @Html.DisplayNameFor(model => model.Uso)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Disponible)
+            <th width="40">
+                Amb.
+                @*@Html.DisplayNameFor(model => model.Ambientes)*@
+            </th>
+            <th width="40">
+                Disp.
+                @*@Html.DisplayNameFor(model => model.Disponible)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Propietario)
             </th>
-            <th></th>
+            <th width="90"></th>
         </tr>
     </thead>
     <tbody>
@@ -41,31 +56,42 @@
         {
             @foreach (var item in Model)
             {
-                <tr>
+        <tr>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Direccion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tipo)
-                    </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uso)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Ambientes)
+            </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Ambientes)
-                    </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Disponible)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Propietario.Nombre)
+            </td>
+            <td>
+                <div>
+                    <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Disponible)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Propietario.Nombre)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
+                </div>
+                <div>
+                    <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+
+                </div>
+                <div>
+                    <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+
+                </div>
+            </td>
+        </tr>
             }
         }
 

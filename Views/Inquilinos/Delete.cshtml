@@ -1,7 +1,7 @@
-﻿@model InmobiliariaAlbornoz.Models.Inmueble
+﻿@model InmobiliariaAlbornoz.Models.Inquilino
 
 @{
-    ViewData["Title"] = "Borrar Inmueble";
+    ViewData["Title"] = "Borrar Inquilino";
 }
 
 @if (TempData["msg"] != null)
@@ -20,9 +20,9 @@
 
 <h1>Borrar</h1>
 
-<h3>¿Seguro que desea borrar?</h3>
+<h3>¿Está seguro?</h3>
 <div>
-    <h4>Inmueble</h4>
+    <h4>Inquilino</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -32,56 +32,45 @@
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Direccion)
+            @Html.DisplayNameFor(model => model.Dni)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Direccion)
+            @Html.DisplayFor(model => model.Dni)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
+            @Html.DisplayNameFor(model => model.Nombre)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
+            @Html.DisplayFor(model => model.Nombre)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Uso)
+            @Html.DisplayNameFor(model => model.FechaN)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Uso)
+            @Html.DisplayFor(model => model.FechaN)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ambientes)
+            @Html.DisplayNameFor(model => model.DireccionTrabajo)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ambientes)
+            @Html.DisplayFor(model => model.DireccionTrabajo)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
+            @Html.DisplayNameFor(model => model.Telefono)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
+            @Html.DisplayFor(model => model.Telefono)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Disponible)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Disponible)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Propietario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Propietario.Nombre)
+            @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
 
     <form asp-action="Delete">
-        <input type="submit" value="Borrar" class="btn btn-danger" />
+        <input type="submit" value="Borrar" class="btn btn-danger" /> |
+        <a class="btn btn-link" asp-action="Index">Lista de Inquilinos</a>
     </form>
-</div>
-
-<hr />
-
-<div>
-    <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
 </div>

@@ -66,53 +66,91 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: PropietariosController/Edit/5
         public ActionResult Edit(int id)
         {
-            var p = repo.ById(id);
-            return View(p);
+            try
+            {
+                var p = repo.ById(id);
+                if (p.Id > 0)
+                {
+                    return View(p);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró el propietario. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurrió un error. intente nuevamente.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: PropietariosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Propietario p)
         {
-            Propietario p = new Propietario();
-            p.Id = id;
-            p.Nombre = collection["Nombre"].ToString();
-            p.Dni = collection["Dni"].ToString();
-            p.FechaN = DateTime.Parse(collection["FechaN"].ToString());
-            p.Direccion = collection["Direccion"].ToString();
-            p.Email = collection["Email"].ToString();
-            p.Telefono = collection["Telefono"].ToString();
+            //Propietario p = new Propietario();
+            //p.Id = id;
+            //p.Nombre = collection["Nombre"].ToString();
+            //p.Dni = collection["Dni"].ToString();
+            //p.FechaN = DateTime.Parse(collection["FechaN"].ToString());
+            //p.Direccion = collection["Direccion"].ToString();
+            //p.Email = collection["Email"].ToString();
+            //p.Telefono = collection["Telefono"].ToString();
 
             try
             {
-                int res = repo.Edit(p);
-                if (res > 0)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
+                    int res = repo.Edit(p);
+                    if (res > 0)
+                    {
+                        TempData["msg"] = "Cambios guardados.";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+                    else
+                    {
+                        TempData["msg"] = "No se guardaron los cambios. Intente Nuevamente.";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
                 }
                 else
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["msg"] = "Los datos ingresados no son válidos.";
+                    return RedirectToAction(nameof(Edit), new { id = id });
                 }
+
             }
             catch
             {
-                return View();
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Edit), new { id = id });
             }
         }
 
         // GET: PropietariosController/Delete/5
         public ActionResult Delete(int id)
         {
-            int res = repo.Delete(id);
-            if (res > 0)
+
+            try
             {
-                return RedirectToAction(nameof(Index));
+                var p = repo.ById(id);
+
+                if (p.Id > 0)
+                {
+                    return View(p);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró el propietario. Intente nuevamente.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction(nameof(Index));
+                throw e;
             }
         }
 
@@ -123,10 +161,26 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var res = repo.Delete(id);
+                if (res > 0)
+                {
+                    TempData["msg"] = "Propietario borrado";
+                    return RedirectToAction(nameof(Index));
+                }
+                else if (res == 0)
+                {
+                    TempData["msg"] = "No se pudo borrar propietario. Intente Nuevamente.";
+                    return RedirectToAction(nameof(Delete), new { id = id });
+                }
+                else
+                {
+                    TempData["msg"] = "No se puede borrar un propietario con inmuebles registrados";
+                    return RedirectToAction(nameof(Delete), new { id = id });
+                }
             }
-            catch
+            catch (Exception e)
             {
+                TempData["msg"] = e.Message;
                 return View();
             }
         }

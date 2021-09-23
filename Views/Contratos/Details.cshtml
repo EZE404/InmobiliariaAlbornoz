@@ -4,90 +4,98 @@
     ViewData["Title"] = "Detalles de Contrato";
 }
 
-@if (ViewData["Error"] != null)
+@if (TempData["msg"] != null)
 {
-    <p class="alert-warning">@ViewData["Error"]</p>
-}
-else
-{
-    <h1>Detalles</h1>
-
-    <div>
-        <h4>Contrato</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Id)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Id)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.IdInmueble)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.IdInmueble)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Inmueble.Propietario)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Inmueble.Propietario.Nombre)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Inquilino)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Inquilino.Nombre)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Desde)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Desde)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Hasta)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Hasta)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Valido)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Valido)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.DniGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.DniGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.NombreGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.NombreGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.TelefonoGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.TelefonoGarante)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.EmailGarante)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.EmailGarante)
-            </dd>
-        </dl>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
     </div>
 }
-
+<h1>Detalles</h1>
 
 <div>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Volver a la Lista</a>
+    <h4>Contrato</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.IdInmueble)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.IdInmueble)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Inmueble.Propietario)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Inmueble.Propietario.Nombre)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Inquilino)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Inquilino.Nombre)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Desde)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Desde)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Hasta)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Hasta)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Valido)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Valido)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.DniGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DniGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.NombreGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.NombreGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.TelefonoGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.TelefonoGarante)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.EmailGarante)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.EmailGarante)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+</div>
+
+<hr />
+<div>
+    <a class="btn btn-link" asp-action="Index">Lista de Contratos</a>
 </div>
