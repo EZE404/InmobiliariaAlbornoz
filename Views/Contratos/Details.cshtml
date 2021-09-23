@@ -92,7 +92,11 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @if (Model.Valido)
+    {
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        <a class="btn btn-warning" asp-controller="Pagos" asp-action="Create" asp-route-id="@Model.Id">Cargar Pago</a>
+    }
 </div>
 
 <hr />

@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Inmuebles disponibles por Fecha";
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<h1>Inmuebles disponibles por Fechas</h1>
+<hr />
+
+<div class="row">
+    <div class="col-sm-6">
+        <p class="lead" id="p_aviso"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <input type="date" class="form-control" name="desde" id="desde" />
+    </div>
+    <div class="col-sm-3">
+        <input type="date" class="form-control" name="hasta" id="hasta" />
+    </div>
+    <div class="col-sm-3">
+        <button class="btn btn-primary" onclick="consultar()" id="btn_buscar">Consultar</button>
+    </div>
+    <div class="cols-sm-3">
+        <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table" id="table_id">
+            <thead>
+                <tr>
+                    <th>Dirección</th>
+                    <th>Tipo</th>
+                    <th>Uso</th>
+                    <th>Amb.</th>
+                    <th>Disp.</th>
+                    <th>Propietario</th>
+                    <th width="70"></th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr />
+<div>
+    <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
+</div>
+
+<script>
+    const p_aviso = document.getElementById("p_aviso");
+    const btn_buscar = document.getElementById("btn_buscar");
+    const tbody = document.getElementById("tbody");
+    btn_buscar.addEventListener("click", async () => {
+        p_aviso.innerText = "";
+        tbody.innerHTML = "";
+        let data = new URLSearchParams();
+        data.append("desde", document.getElementById("desde").value);
+        data.append("hasta", document.getElementById("hasta").value);
+
+        try {
+
+
+        let res = await fetch("/Inmuebles/GetAvailablesByDates", {
+            // Adding method type
+            method: "POST",
+
+            // Adding body or contents to send
+            body: data
+        });
+
+        let parsed = await res.json();
+
+        for (i of parsed) {
+            let fila = document.createElement("tr");
+            let col_dir = document.createElement("td");
+            let col_tipo = document.createElement("td");
+            let col_uso = document.createElement("td");
+            let col_amb = document.createElement("td");
+            let col_disp = document.createElement("td");
+            let col_prop = document.createElement("td");
+            let col_acc = document.createElement("td");
+
+            col_dir.innerText = i.direccion;
+            col_tipo.innerText = i.tipo;
+            col_uso.innerText = i.uso;
+            col_amb.innerText = i.ambientes;
+            col_disp.innerText = (i.disponible) ? "Sí" : "No";
+            col_prop.innerText = i.propietario.nombre;
+            col_acc.innerText = "";
+
+            fila.appendChild(col_dir);
+            fila.appendChild(col_tipo);
+            fila.appendChild(col_uso);
+            fila.appendChild(col_amb);
+            fila.appendChild(col_disp);
+            fila.appendChild(col_prop);
+            fila.appendChild(col_acc);
+
+            tbody.appendChild(fila);
+            }
+        } catch (e) {
+            p_aviso.innerText = "Ocurrió un problema. Intenta nuevamente"
+        }
+    });
+</script>

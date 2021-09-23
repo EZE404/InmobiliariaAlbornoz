@@ -292,6 +292,66 @@ namespace InmobiliariaAlbornoz.Data
 
             return res;
         }
+
+        public IList<Inmueble> InmueblesAvailableByDates(DateTime desde, DateTime hasta)
+        {
+            IList<Inmueble> inmuebles = new List<Inmueble>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT i2.Id, i2.Direccion, i2.Tipo, i2.Uso,
+                                i2.Ambientes, i2.Precio, i2.Disponible,
+                                i2.IdPropietario, p.Nombre
+                                FROM propietario p INNER JOIN (
+                                SELECT DISTINCT i.* FROM inmueble i INNER JOIN contrato c ON (i.Id = c.IdInmueble)
+                                AND @desde NOT BETWEEN c.Desde AND c.Hasta 
+                                AND @hasta NOT BETWEEN c.Desde AND c.Hasta 
+                                AND i.Disponible = 1
+                                UNION
+                                SELECT i.* FROM inmueble i WHERE i.Id NOT IN (
+	                                SELECT DISTINCT c.IdInmueble FROM contrato c 	
+                                )
+                                AND i.Disponible = 1) i2
+                                ON (i2.IdPropietario = p.Id);";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@desde", desde);
+                    comm.Parameters.AddWithValue("@hasta", hasta);
+
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+                    
+                    while (reader.Read())
+                    {
+                        var i = new Inmueble
+                        {
+                            Id = reader.GetInt32(0),
+                            Direccion = reader.GetString(1),
+                            Tipo = reader.GetInt32(2),
+                            Uso = reader.GetInt32(3),
+                            Ambientes = reader.GetInt32(4),
+                            Precio = reader.GetDecimal(5),
+                            Disponible = reader.GetBoolean(6),
+                            IdPropietario = reader.GetInt32(7),
+                        };
+
+                        var p = new Propietario
+                        {
+                            Id = reader.GetInt32(7),
+                            Nombre = reader.GetString(8)
+                        };
+
+                        i.Propietario = p;
+
+                        inmuebles.Add(i);
+                    }
+                    conn.Close();
+                }
+            }
+            return inmuebles;
+        }
+
         public Inmueble ById(int id) {
 
             Inmueble i = new Inmueble();

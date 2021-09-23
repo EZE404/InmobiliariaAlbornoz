@@ -238,5 +238,31 @@ namespace InmobiliariaAlbornoz.Controllers
 
             }
         }
+
+        public ActionResult Availables()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetAvailablesByDates(IFormCollection form)
+        {
+
+            IList <Inmueble> inmuebles;
+            
+            try
+            {
+                DateTime desde = DateTime.Parse(form["desde"].ToString());
+                DateTime hasta = DateTime.Parse(form["hasta"].ToString());
+                inmuebles = repo.InmueblesAvailableByDates(desde, hasta);
+                return Ok(inmuebles);
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurió un error. Intente nuevamente";
+                return RedirectToAction(nameof(Availables));
+            }
+
+        }
     }
 }
