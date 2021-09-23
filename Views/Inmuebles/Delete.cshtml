@@ -20,10 +20,11 @@
 
 <h1>Borrar</h1>
 
-<h3>¿Seguro que desea borrar?</h3>
 <div>
     <h4>Inmueble</h4>
     <hr />
+    <h3>¿Seguro que desea borrar?</h3>
+<hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
@@ -38,16 +39,16 @@
             @Html.DisplayFor(model => model.Direccion)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
+            @Html.DisplayNameFor(model => model.TipoNombre)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
+            @Html.DisplayFor(model => model.TipoNombre)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Uso)
+            @Html.DisplayNameFor(model => model.UsoNombre)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Uso)
+            @Html.DisplayFor(model => model.UsoNombre)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ambientes)

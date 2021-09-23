@@ -1,9 +1,26 @@
 
 
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace InmobiliariaAlbornoz.Models
 {
+    public enum enTipos
+    {
+        Local = 1,
+        Depósito = 2,
+        Casa = 3,
+        Depto = 4,
+        Otros = 5
+    }
+
+    public enum enUsos
+    {
+        Comercial = 1,
+        Residencial = 2
+    }
+
     public class Inmueble
     {
         [Display(Name = "Código")]
@@ -15,10 +32,16 @@ namespace InmobiliariaAlbornoz.Models
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        public string Tipo { get; set; }
+        public int Tipo { get; set; }
+
+        [Display(Name ="Tipo")]
+        public string TipoNombre => Tipo > 0 ? ((enTipos)Tipo).ToString() : "";
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        public string Uso { get; set; }
+        public int Uso { get; set; }
+
+        [Display(Name = "Uso")]
+        public string UsoNombre => Uso > 0 ? ((enUsos)Uso).ToString() : "";
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "N° Ambientes")]
@@ -35,5 +58,26 @@ namespace InmobiliariaAlbornoz.Models
 
         public Propietario Propietario { get; set; }
 
+        public static IDictionary<int, string> ObtenerTipos()
+        {
+            SortedDictionary<int, string> tipos = new SortedDictionary<int, string>();
+            Type tipoEnumTipo = typeof(enTipos);
+            foreach (var valor in Enum.GetValues(tipoEnumTipo))
+            {
+                tipos.Add((int)valor, Enum.GetName(tipoEnumTipo, valor));
+            }
+            return tipos;
+        }
+
+        public static IDictionary<int, string> ObtenerUsos()
+        {
+            SortedDictionary<int, string> usos = new SortedDictionary<int, string>();
+            Type tipoEnumUso = typeof(enUsos);
+            foreach (var valor in Enum.GetValues(tipoEnumUso))
+            {
+                usos.Add((int)valor, Enum.GetName(tipoEnumUso, valor));
+            }
+            return usos;
+        }
     }
 }

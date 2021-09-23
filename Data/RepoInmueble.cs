@@ -11,17 +11,27 @@ namespace InmobiliariaAlbornoz.Data
         public RepoInmueble(IConfiguration configuration) : base(configuration)
         {
         }
-        public int Edit(Inmueble i)
+        public int Edit(Inmueble i, bool isTaken)
         {
             int res = -1;
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                string sql = @"UPDATE Inmueble
+
+            string sql = @"UPDATE Inmueble
                             SET Direccion = @direccion , Tipo = @tipo , Uso = @uso , 
                             Ambientes = @ambientes , Precio = @precio , Disponible = @disponible, 
                             IdPropietario = @id_propietario  
                             WHERE Id = @id ;";
 
+            if (isTaken)
+            {
+                sql = @"UPDATE Inmueble
+                            SET Direccion = @direccion , Tipo = @tipo , Uso = @uso , 
+                            Ambientes = @ambientes , Precio = @precio , 
+                            IdPropietario = @id_propietario  
+                            WHERE Id = @id ;";
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))
                 {
                     comm.Parameters.AddWithValue("@direccion", i.Direccion);
@@ -29,9 +39,12 @@ namespace InmobiliariaAlbornoz.Data
                     comm.Parameters.AddWithValue("@uso", i.Uso);
                     comm.Parameters.AddWithValue("@ambientes", i.Ambientes);
                     comm.Parameters.AddWithValue("@precio", i.Precio);
-                    comm.Parameters.AddWithValue("@disponible", i.Disponible);
                     comm.Parameters.AddWithValue("@id_propietario",i.IdPropietario);
                     comm.Parameters.AddWithValue("@id", i.Id);
+                    if (!isTaken)
+                    {
+                        comm.Parameters.AddWithValue("@disponible", i.Disponible);
+                    }
 
                     conn.Open();
                     res = Convert.ToInt32(comm.ExecuteNonQuery());
@@ -80,8 +93,8 @@ namespace InmobiliariaAlbornoz.Data
                     {
                         i.Id = reader.GetInt32(0);
                         i.Direccion = reader.GetString(1);
-                        i.Tipo = reader.GetString(2);
-                        i.Uso = reader.GetString(3);
+                        i.Tipo = reader.GetInt32(2);
+                        i.Uso = reader.GetInt32(3);
                         i.Ambientes = reader.GetInt32(4);
                         i.Precio = reader.GetDecimal(5);
                         i.Disponible = reader.GetBoolean(6);
@@ -178,8 +191,8 @@ namespace InmobiliariaAlbornoz.Data
                         var i = new Inmueble {
                             Id = reader.GetInt32(0),
                             Direccion = reader.GetString(1),
-                            Tipo = reader.GetString(2),
-                            Uso = reader.GetString(3),
+                            Tipo = reader.GetInt32(2),
+                            Uso = reader.GetInt32(3),
                             Ambientes = reader.GetInt32(4),
                             Precio = reader.GetDecimal(5),
                             Disponible = reader.GetBoolean(6),
@@ -232,8 +245,8 @@ namespace InmobiliariaAlbornoz.Data
                         {
                             Id = reader.GetInt32(0),
                             Direccion = reader.GetString(1),
-                            Tipo = reader.GetString(2),
-                            Uso = reader.GetString(3),
+                            Tipo = reader.GetInt32(2),
+                            Uso = reader.GetInt32(3),
                             Ambientes = reader.GetInt32(4),
                             Precio = reader.GetDecimal(5),
                             Disponible = reader.GetBoolean(6),
@@ -258,6 +271,27 @@ namespace InmobiliariaAlbornoz.Data
             return list;
         }
 
+        public bool isTaken(int id)
+        {
+            bool res = false;
+
+            string sql = @"SELECT c.Id FROM contrato c WHERE c.IdInmueble = @id 
+                        AND c.Valido = 1 AND current_date() BETWEEN c.Desde AND c.Hasta;";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+                    res = (reader.HasRows) ? true : false;
+                    conn.Close();
+                }
+            }
+
+            return res;
+        }
         public Inmueble ById(int id) {
 
             Inmueble i = new Inmueble();
@@ -283,8 +317,8 @@ namespace InmobiliariaAlbornoz.Data
 
                         i.Id = id;
                         i.Direccion = reader.GetString(0);
-                        i.Tipo = reader.GetString(1);
-                        i.Uso = reader.GetString(2);
+                        i.Tipo = reader.GetInt32(1);
+                        i.Uso = reader.GetInt32(2);
                         i.Ambientes = reader.GetInt32(3);
                         i.Precio = reader.GetDecimal(4);
                         i.Disponible = (bool)reader.GetBoolean(5);

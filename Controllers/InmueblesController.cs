@@ -68,6 +68,8 @@ namespace InmobiliariaAlbornoz.Controllers
             try
             {
                 ViewBag.Propietarios = repoPropietario.All();
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 return View();
             }
             catch (Exception)
@@ -96,18 +98,24 @@ namespace InmobiliariaAlbornoz.Controllers
                     else
                     {
                         TempData["msg"] = "No se cargó el inmueble. Intente nuevamente.";
+                        ViewBag.Tipos = Inmueble.ObtenerTipos();
+                        ViewBag.Usos = Inmueble.ObtenerUsos();
                         return View();
                     }
                 }
                 else
                 {
                     TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    ViewBag.Tipos = Inmueble.ObtenerTipos();
+                    ViewBag.Usos = Inmueble.ObtenerUsos();
                     return View();
                 }
             }
             catch (Exception)
             {
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente";
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 return View();
             }
         }
@@ -129,6 +137,18 @@ namespace InmobiliariaAlbornoz.Controllers
                 var i = repo.ById(id);
                 if (i.Id > 0)
                 {
+                    var isTaken = repo.isTaken(i.Id);
+                    if (isTaken)
+                    {
+                        ViewBag.IsTaken = true;
+                    }
+                    else
+                    {
+                        ViewBag.IsTaken = false;
+                    }
+
+                    ViewBag.Tipos = Inmueble.ObtenerTipos();
+                    ViewBag.Usos = Inmueble.ObtenerUsos();
                     return View(i);
                 }
                 else
@@ -153,9 +173,11 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // TODO: Add update logic here
                     i.Id = id;
-                    var res = repo.Edit(i);
+
+                    var isTaken = repo.isTaken(id);
+
+                    var res = repo.Edit(i, isTaken);
                     if (res > 0)
                     {
                         TempData["msg"] = "Cambios guardados.";
