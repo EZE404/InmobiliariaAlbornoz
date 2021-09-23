@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace InmobiliariaAlbornoz.Controllers
 {
+    [Authorize]
     public class InmueblesController : Controller
     {
         private RepoInmueble repo;

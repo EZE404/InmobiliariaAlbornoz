@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace InmobiliariaAlbornoz.Controllers
 {
+    [Authorize]
     public class ContratosController : Controller
     {
         private RepoContrato repo;

@@ -1,5 +1,6 @@
 ﻿using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace InmobiliariaAlbornoz.Controllers
 {
+    [Authorize]
     public class InquilinosController : Controller
     {
         RepoInquilino repo;

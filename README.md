@@ -7,5 +7,4 @@
 
 # Falta:
 
-* Agregar restricciones a los ABM (No están para no estar logueando a cada rato durante desarrollo)
 * Informes.
