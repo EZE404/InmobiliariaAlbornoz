@@ -1,4 +1,6 @@
-﻿@{
+﻿@model InmobiliariaAlbornoz.ModelsAux.InmuebleAvailableByDates
+
+@{
     ViewData["Title"] = "Inmuebles disponibles por Fecha";
 }
 
@@ -17,29 +19,36 @@
 }
 
 <h1>Inmuebles disponibles por Fechas</h1>
+
 <hr />
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <p class="lead" id="p_aviso"></p>
     </div>
 </div>
+
 <div class="row">
     <div class="col-sm-3">
+        <label asp-for="Desde" class="form-label"></label>
         <input type="date" class="form-control" name="desde" id="desde" />
+        <span asp-validation-for="Desde" class="text-danger"></span>
     </div>
     <div class="col-sm-3">
+        <label asp-for="Hasta" class="form-label"></label>
         <input type="date" class="form-control" name="hasta" id="hasta" />
+        <span asp-validation-for="Hasta" class="text-danger"></span>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 mt-auto">
         <button class="btn btn-primary" onclick="consultar()" id="btn_buscar">Consultar</button>
     </div>
-    <div class="cols-sm-3">
+    <div class="cols-sm-3 mt-auto">
         <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
     </div>
 </div>
 
 <hr />
+
 <div class="row">
     <div class="col-sm-12">
         <table class="table" id="table_id">
@@ -49,7 +58,6 @@
                     <th>Tipo</th>
                     <th>Uso</th>
                     <th>Amb.</th>
-                    <th>Disp.</th>
                     <th>Propietario</th>
                     <th width="70"></th>
                 </tr>
@@ -61,64 +69,13 @@
 </div>
 
 <hr />
+
 <div>
     <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
 </div>
 
-<script>
-    const p_aviso = document.getElementById("p_aviso");
-    const btn_buscar = document.getElementById("btn_buscar");
-    const tbody = document.getElementById("tbody");
-    btn_buscar.addEventListener("click", async () => {
-        p_aviso.innerText = "";
-        tbody.innerHTML = "";
-        let data = new URLSearchParams();
-        data.append("desde", document.getElementById("desde").value);
-        data.append("hasta", document.getElementById("hasta").value);
-
-        try {
-
-
-        let res = await fetch("/Inmuebles/GetAvailablesByDates", {
-            // Adding method type
-            method: "POST",
-
-            // Adding body or contents to send
-            body: data
-        });
-
-        let parsed = await res.json();
-
-        for (i of parsed) {
-            let fila = document.createElement("tr");
-            let col_dir = document.createElement("td");
-            let col_tipo = document.createElement("td");
-            let col_uso = document.createElement("td");
-            let col_amb = document.createElement("td");
-            let col_disp = document.createElement("td");
-            let col_prop = document.createElement("td");
-            let col_acc = document.createElement("td");
-
-            col_dir.innerText = i.direccion;
-            col_tipo.innerText = i.tipo;
-            col_uso.innerText = i.uso;
-            col_amb.innerText = i.ambientes;
-            col_disp.innerText = (i.disponible) ? "Sí" : "No";
-            col_prop.innerText = i.propietario.nombre;
-            col_acc.innerText = "";
-
-            fila.appendChild(col_dir);
-            fila.appendChild(col_tipo);
-            fila.appendChild(col_uso);
-            fila.appendChild(col_amb);
-            fila.appendChild(col_disp);
-            fila.appendChild(col_prop);
-            fila.appendChild(col_acc);
-
-            tbody.appendChild(fila);
-            }
-        } catch (e) {
-            p_aviso.innerText = "Ocurrió un problema. Intenta nuevamente"
-        }
-    });
-</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DataTable");}
+    <script src="~/js/Inmuebles/Availables/datatable.js"></script>
+}

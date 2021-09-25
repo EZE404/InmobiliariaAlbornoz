@@ -51,6 +51,7 @@ namespace InmobiliariaAlbornoz.Models
         public decimal Precio { get; set; }
 
         public bool Disponible { get; set; }
+        public string DisponibleNombre => Disponible ? "Sí" : "No";
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Propietario")]

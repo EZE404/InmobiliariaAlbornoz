@@ -32,6 +32,8 @@ namespace InmobiliariaAlbornoz.Models
         [Display(Name = "Válido")]
         public bool Valido { get; set; }
 
+        public string ValidoNombre => Valido ? "Sí" : "No";
+
         //Relaciones
         public Inmueble Inmueble { get; set; }
         public Inquilino Inquilino { get; set; }

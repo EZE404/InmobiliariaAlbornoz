@@ -35,7 +35,7 @@ namespace InmobiliariaAlbornoz.Models
         public string Tipo { get; set; }
 
         public bool Anulado { get; set; }
-
+        public string AnuladoNombre => Anulado ? "Sí" : "No";
         public Contrato Contrato { get; set; }
     }
 }

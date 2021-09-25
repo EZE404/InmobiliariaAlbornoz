@@ -57,44 +57,48 @@
         {
             @foreach (var item in Model)
             {
-        <tr>
+                <tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsoNombre)
-            </td>
-            <td class="text-center">
-                @Html.DisplayFor(modelItem => item.Ambientes)
-            </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoNombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsoNombre)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Ambientes)
+                    </td>
 
-            <td class="text-center">
-                @Html.DisplayFor(modelItem => item.Disponible)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Propietario.Nombre)
-            </td>
-            <td>
-                <div>
-                    <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.DisponibleNombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Propietario.Nombre)
+                    </td>
+                    <td>
+                        <div>
+                            <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
 
-                </div>
-                <div>
-                    <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                        </div>
+                        <div>
+                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
 
-                </div>
-                <div>
-                    <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                        </div>
+                        <div>
+                            <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
 
-                </div>
-            </td>
-        </tr>
+                        </div>
+                    </td>
+                </tr>
             }
         }
 
     </tbody>
 </table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTable");}
+}
