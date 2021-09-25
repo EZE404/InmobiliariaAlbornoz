@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Lista de Contratos";
+    Inmueble i = (Inmueble)ViewBag.Inmueble;
 }
 
 @if (TempData["msg"] != null)
@@ -32,18 +33,12 @@
     </div>
 }
 
-<h1>Contratos</h1>
+<h2>Contratos de <a asp-action="Details" asp-controller="Inmuebles" asp-route-id="@i.Id">Inmueble @i.Id</a> ubicado en @i.Direccion</h2>
 <hr />
-<p>
-    <a class="btn btn-secondary" asp-action="Create"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
-</p>
-<hr />
+
 <table class="table" id="table_id">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IdInmueble)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Inquilino)
             </th>
@@ -66,9 +61,6 @@
             {
                 <tr>
                     <td>
-                        <a asp-action="Details" asp-controller="Inmuebles" asp-router-id="@item.Id">Ver</a>
-                    </td>
-                    <td>
                         <a asp-action="Details" asp-controller="Inquilinos" asp-route-id="@item.IdInquilino">@item.Inquilino.Nombre</a>
                         @*@Html.DisplayFor(modelItem => item.Inquilino.Nombre)*@
                     </td>
@@ -85,14 +77,14 @@
                         @if (item.Valido)
                         {
                             <div>
-                                <i class="fas fa-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
-</div>
+                                <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                            </div>
                             <div>
-                                <i class="far fa-credit-card"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
+                                <i class="fas fa-user-edit"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
                             </div>
                         }
                         <div>
-                            <i class="fas fa-info-circle"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
                         </div>
                         @if (User.IsInRole("Administrador"))
                         {

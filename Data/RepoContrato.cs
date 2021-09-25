@@ -288,6 +288,69 @@ namespace InmobiliariaAlbornoz.Data
             return lista;
         }
 
+        public IList<Contrato> AllByInmueble(int id)
+        {
+            IList<Contrato> lista = new List<Contrato>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT c.Id, c.IdInmueble, c.IdInquilino, c.Desde, c.Hasta, c.NombreGarante, c.Valido,
+                                i.IdPropietario, p.Nombre, 
+                                i2.Nombre
+                                FROM Contrato c INNER JOIN Inmueble i ON c.IdInmueble = i.Id 
+                                INNER JOIN Propietario p ON i.IdPropietario = p.Id 
+                                INNER JOIN Inquilino i2 ON c.IdInquilino = i2.Id
+                                WHERE c.IdInmueble = @id ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Propietario p = new Propietario
+                        {
+                            Id = reader.GetInt32(7),
+                            Nombre = reader.GetString(8),
+                        };
+
+                        Inmueble i = new Inmueble
+                        {
+                            Id = reader.GetInt32(1),
+                            Propietario = p,
+                        };
+
+                        Inquilino i2 = new Inquilino
+                        {
+                            Id = reader.GetInt32(2),
+                            Nombre = reader.GetString(9)
+                        };
+
+                        Contrato c = new Contrato
+                        {
+                            Id = reader.GetInt32(0),
+                            IdInmueble = reader.GetInt32(1),
+                            IdInquilino = reader.GetInt32(2),
+                            Desde = reader.GetDateTime(3),
+                            Hasta = reader.GetDateTime(4),
+                            NombreGarante = reader.GetString(5),
+                            Valido = reader.GetBoolean(6),
+                            Inmueble = i,
+                            Inquilino = i2,
+                        };
+
+                        lista.Add(c);
+                    }
+
+                    conn.Close();
+                }
+
+            }
+
+            return lista;
+        }
         public IList<Contrato> AllByInquilino(int id, bool valid)
         {
             IList<Contrato> lista = new List<Contrato>();

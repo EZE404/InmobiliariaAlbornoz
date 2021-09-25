@@ -17,11 +17,13 @@ namespace InmobiliariaAlbornoz.Controllers
     {
         private RepoInmueble repo;
         private RepoPropietario repoPropietario;
+        private RepoContrato repoContrato;
 
         public InmueblesController(IConfiguration config)
         {
             this.repo = new RepoInmueble(config);
             this.repoPropietario = new RepoPropietario(config);
+            this.repoContrato = new RepoContrato(config);
         }
 
         // GET: Inmueble
@@ -277,6 +279,28 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 TempData["msg"] = "Ocurió un error. Intente nuevamente";
                 return View("Availables");
+            }
+
+        }
+
+        public ActionResult Contratos(int id)
+        {
+            try
+            {
+                var i = repo.ById(id);
+                if (i.Id == 0)
+                {
+                    TempData["msg"] = "No se encontró el Inmueble.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                IList<Contrato> contratos = repoContrato.AllByInmueble(i.Id);
+                ViewBag.Inmueble = i;
+                return View(contratos);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
         }

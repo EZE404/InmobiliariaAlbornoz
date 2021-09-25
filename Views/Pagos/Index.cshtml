@@ -82,11 +82,11 @@
                     @if (!item.Anulado)
                     {
                         <div>
-                            <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                            <i class="fas fa-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
                         </div>
                     }
                     <div>
-                        <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                        <i class="fas fa-info-circle"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
                     </div>
                     @if (User.IsInRole("Administrador"))
                     {

@@ -34,9 +34,8 @@
             @Html.DisplayNameFor(model => model.IdContrato)
         </dt>
         <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.IdContrato)
             <a asp-controller="Contratos" asp-action="Details" asp-route-id="@Model.IdContrato">
-                Ver Contrato
+                Ver Contrato @Html.DisplayFor(model => model.IdContrato)
             </a>
         </dd>
         <dt class="col-sm-4">

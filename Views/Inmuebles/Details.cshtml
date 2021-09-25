@@ -65,6 +65,7 @@
 <div>
     @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
     @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+    <a class="btn btn-success" asp-action="Contratos" asp-controller="Inmuebles" asp-route-id="@Model.Id">Contratos</a>
 </div>
 
 <hr />

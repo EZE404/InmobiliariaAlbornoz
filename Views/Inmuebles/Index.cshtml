@@ -81,16 +81,18 @@
                     </td>
                     <td>
                         <div>
-                            <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
-
+                            <i class="fas fa-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
                         </div>
                         <div>
-                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
-
+                            <i class="fas fa-info-circle"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
                         </div>
                         <div>
                             <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-
+                        </div>
+                        <div>
+                            <i class="fas fa-file-contract"></i> <a asp-action="Contratos" asp-controller="Inmuebles" asp-route-id="@item.Id">
+                                Contratos
+                            </a>
                         </div>
                     </td>
                 </tr>
