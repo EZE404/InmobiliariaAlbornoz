@@ -37,7 +37,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th></th>
+            <th width="220"></th>
         </tr>
     </thead>
     <tbody>
@@ -54,9 +54,16 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                    <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })<br />
+                            <i class="fas fa-hotel"></i> @Html.ActionLink("Inmuebles", "Inmuebles", new { id = item.Id })
+                        </div>
+                        <div class="col-sm-6">
+                            <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })<br />
+                            <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                        </div>
+                    </div>
                 </td>
             </tr>
         }

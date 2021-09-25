@@ -15,10 +15,11 @@ namespace InmobiliariaAlbornoz.Controllers
     public class PropietariosController : Controller
     {
         RepoPropietario repo;
-
+        RepoInmueble repoInmueble;
         public PropietariosController(IConfiguration config)
         {
             repo = new RepoPropietario(config);
+            repoInmueble = new RepoInmueble(config);
         }
 
         // GET: PropietariosController
@@ -216,6 +217,27 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 TempData["msg"] = e.Message;
                 return View();
+            }
+        }
+
+        public ActionResult Inmuebles(int id)
+        {
+            try
+            {
+                var p = repo.ById(id);
+                if (p.Id == 0)
+                {
+                    TempData["msg"] = "No se encontró Propietario.";
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewBag.Propietario = p;
+                IList<Inmueble> inmuebles = repoInmueble.AllByInquilino(id);
+                return View(inmuebles);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
         }
     }

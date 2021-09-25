@@ -1,0 +1,95 @@
+﻿@model IEnumerable<InmobiliariaAlbornoz.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Inmuebles de Inquilino";
+    Propietario p = (Propietario)ViewBag.Propietario;
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<h1>Inmuebles de <a asp-action="Details" asp-controller="Propietarios" asp-route-id="@p.Id">@p.Nombre</a></h1>
+
+<hr />
+<table class="table" id="table_id">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoNombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsoNombre)
+            </th>
+            <th width="40">
+                Amb.
+                @*@Html.DisplayNameFor(model => model.Ambientes)*@
+            </th>
+            <th width="40">
+                Disp.
+                @*@Html.DisplayNameFor(model => model.Disponible)*@
+            </th>
+            <th width="90"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoNombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsoNombre)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Ambientes)
+                    </td>
+
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.DisponibleNombre)
+                    </td>
+                    <td>
+                        <div>
+                            <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+
+                        </div>
+                        <div>
+                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+
+                        </div>
+                        <div>
+                            <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTable");}
+}
