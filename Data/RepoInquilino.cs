@@ -237,5 +237,42 @@ namespace InmobiliariaAlbornoz.Data
 
             return i;
         }
+
+        public Inquilino ByDni(string dni)
+        {
+
+            Inquilino i = new Inquilino();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT Id, Dni, Nombre, FechaN, DomicilioTrabajo, Telefono, Email 
+                                FROM Inquilino WHERE Dni = @dni ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@dni", dni);
+
+                    conn.Open();
+
+                    var reader = comm.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+
+                        i.Id = reader.GetInt32(0);
+                        i.Dni = reader.GetString(1);
+                        i.Nombre = reader.GetString(2);
+                        i.FechaN = reader.GetDateTime(3);
+                        i.DireccionTrabajo = reader.GetString(4);
+                        i.Telefono = reader.GetString(5);
+                        i.Email = reader.GetString(6);
+                    }
+
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
     }
 }

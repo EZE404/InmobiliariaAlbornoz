@@ -31,15 +31,24 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: InquilinosController/Details/5
         public ActionResult Details(int id)
         {
-            Inquilino i = repo.Details(id);
+            try
+            {
+                Inquilino i = repo.Details(id);
 
-            if (i.Id != 0)
-            {
-                return View(i);
+                if (i.Id != 0)
+                {
+                    return View(i);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró Inquilino.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction(nameof(Index));
+
+                throw e;
             }
         }
 
@@ -58,6 +67,13 @@ namespace InmobiliariaAlbornoz.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var iAux = repo.ByDni(i.Dni);
+                    if(iAux.Id > 0)
+                    {
+                        TempData["msg"] = "Ya existe un registro con el DNI " + i.Dni + ".";
+                        return View();
+                    }
+
                     var res = repo.Put(i);
                     if (res > 0)
                     {
@@ -113,24 +129,22 @@ namespace InmobiliariaAlbornoz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Inquilino i)
         {
-            //Inquilino i = new Inquilino();
-            //i.Id = id;
-            //i.Nombre = collection["Nombre"].ToString();
-            //i.Dni = collection["Dni"].ToString();
-            //i.FechaN = DateTime.Parse(collection["FechaN"].ToString());
-            //i.DireccionTrabajo = collection["DireccionTrabajo"].ToString();
-            //i.Email = collection["Email"].ToString();
-            //i.Telefono = collection["Telefono"].ToString();
-
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var iAux = repo.ByDni(i.Dni);
+                    if (iAux.Id > 0 && i.Id != iAux.Id)
+                    {
+                        TempData["msg"] = "Ya existe un registro con el DNI " + i.Dni + ".";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+
                     int res = repo.Edit(i);
                     if (res > 0)
                     {
                         TempData["msg"] = "Cambios guardados.";
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Edit), new { id = id });
                     }
                     else
                     {
@@ -153,6 +167,7 @@ namespace InmobiliariaAlbornoz.Controllers
         }
 
         // GET: InquilinosController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             try
@@ -178,6 +193,7 @@ namespace InmobiliariaAlbornoz.Controllers
         // POST: InquilinosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

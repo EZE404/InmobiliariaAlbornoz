@@ -53,9 +53,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Hasta)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreGarante)
-            </th>
             <th width="40">
                 @Html.DisplayNameFor(model => model.Valido)
             </th>
@@ -69,19 +66,17 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IdInmueble)
+                        <a asp-action="Details" asp-controller="Inmuebles" asp-router-id="@item.Id">Ver</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Inquilino.Nombre)
+                        <a asp-action="Details" asp-controller="Inquilinos" asp-route-id="@item.IdInquilino">@item.Inquilino.Nombre</a>
+                        @*@Html.DisplayFor(modelItem => item.Inquilino.Nombre)*@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Desde)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Hasta)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NombreGarante)
                     </td>
                     <td class="text-center">
                         @Html.DisplayFor(modelItem => item.ValidoNombre)

@@ -31,16 +31,26 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: PropietariosController/Details/5
         public ActionResult Details(int id)
         {
-            Propietario p = repo.Details(id);
+            try
+            {
+                Propietario p = repo.Details(id);
 
-            if (p.Id != 0)
-            {
-                return View(p);
+                if (p.Id != 0)
+                {
+                    return View(p);
+                }
+                else
+                {
+                    TempData["msg"] = "No se encontró Propietario";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction(nameof(Index));
+
+                throw e;
             }
+
         }
 
         // GET: PropietariosController/Create
@@ -56,11 +66,34 @@ namespace InmobiliariaAlbornoz.Controllers
         {
             try
             {
-                repo.Put(p);
+                if (!ModelState.IsValid)
+                {
+                    TempData["msg"] = "Los datos ingresados no son válidos. Intente nuevamente.";
+                    return View();
+                }
+
+                var pAux = repo.ByDni(p.Dni);
+                
+                if (pAux.Id > 0)
+                {
+                    TempData["msg"] = "Ya existe un registro con el DNI " + p.Dni + ".";
+                    return View();
+                }
+
+                var res = repo.Put(p);
+
+                if (res > 0)
+                {
+                    TempData["msg"] = "Propietario cargado.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                TempData["msg"] = "No se cargó Propietario. Intente nuevamente";
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return View();
             }
         }
@@ -93,19 +126,17 @@ namespace InmobiliariaAlbornoz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Propietario p)
         {
-            //Propietario p = new Propietario();
-            //p.Id = id;
-            //p.Nombre = collection["Nombre"].ToString();
-            //p.Dni = collection["Dni"].ToString();
-            //p.FechaN = DateTime.Parse(collection["FechaN"].ToString());
-            //p.Direccion = collection["Direccion"].ToString();
-            //p.Email = collection["Email"].ToString();
-            //p.Telefono = collection["Telefono"].ToString();
-
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var pAux = repo.ByDni(p.Dni);
+                    if (pAux.Id > 0 && p.Id != pAux.Id)
+                    {
+                        TempData["msg"] = "Ya existe un registro con el DNI " + p.Dni + ".";
+                        return RedirectToAction(nameof(Edit), new { id = id });
+                    }
+
                     int res = repo.Edit(p);
                     if (res > 0)
                     {
@@ -133,13 +164,12 @@ namespace InmobiliariaAlbornoz.Controllers
         }
 
         // GET: PropietariosController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
-
             try
             {
                 var p = repo.ById(id);
-
                 if (p.Id > 0)
                 {
                     return View(p);
@@ -150,15 +180,17 @@ namespace InmobiliariaAlbornoz.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // POST: PropietariosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

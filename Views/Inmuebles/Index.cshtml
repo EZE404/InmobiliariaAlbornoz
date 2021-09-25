@@ -76,7 +76,8 @@
                         @Html.DisplayFor(modelItem => item.DisponibleNombre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Propietario.Nombre)
+                        <a asp-action="Details" asp-controller="Propietarios" asp-route-id="@item.Propietario.Id">@item.Propietario.Nombre</a>
+                        @*@Html.DisplayFor(modelItem => item.Propietario.Nombre)*@
                     </td>
                     <td>
                         <div>

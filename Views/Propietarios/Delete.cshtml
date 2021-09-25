@@ -71,11 +71,13 @@
     </dl>
 
     <form asp-action="Delete" onsubmit="return confirmar()">
-        <input type="submit" value="Borrar" class="btn btn-danger" /> |
-        <a asp-action="Index">Lista de Propietarios</a>
+        <input type="submit" value="Borrar" class="btn btn-danger" />
     </form>
 </div>
-
+<hr />
+<div>
+    <a class="btn btn-link" asp-action="Index">Lista de Propietarios</a>
+</div>
 <script type="text/javascript">
         function confirmar() { return confirm("¿Borrar?") }
 </script>

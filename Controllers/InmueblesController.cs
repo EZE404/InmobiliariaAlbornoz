@@ -206,8 +206,22 @@ namespace InmobiliariaAlbornoz.Controllers
         // GET: Inmueble/Delete/5
         public ActionResult Delete(int id)
         {
-            var i = repo.ById(id);
-            return View(i);
+            try
+            {
+                var i = repo.ById(id);
+                if (i.Id == 0)
+                {
+                    TempData["msg"] = "No se encontró el Inmueble.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(i);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         // POST: Inmueble/Delete/5
@@ -221,21 +235,23 @@ namespace InmobiliariaAlbornoz.Controllers
                 var res = repo.Delete(id);
                 if (res > 0)
                 {
+                    TempData["msg"] = "Registro de Inmueble borrado.";
                     return RedirectToAction(nameof(Index));
-
+                }
+                else if(res == 0)
+                {
+                    TempData["msg"] = "No se borró registro de Inmueble. Intente nuevamente";
+                    return RedirectToAction(nameof(Delete), new { id = id });
                 }
                 else
                 {
-                    Exception e = new Exception("Ocurrió un error al eliminar el registro. Intente nuevamente.");
-                    throw e;
+                    TempData["msg"] = "No se puede borrar un registro de Inmueble que tiene contratos registrados.";
+                    return RedirectToAction(nameof(Index));
                 }
             }
             catch(Exception e)
             {
-                // CONSULTAR CÓMO HACER RECURSIVIDAD CON LA MISMA VISTA Y PASAR LOS PARÁMETROS QUE ESPERA
-                ViewData["Error"] = e.Message;
-                return RedirectToAction(nameof(Index));
-
+                throw e;
             }
         }
 
@@ -260,7 +276,7 @@ namespace InmobiliariaAlbornoz.Controllers
             catch (Exception)
             {
                 TempData["msg"] = "Ocurió un error. Intente nuevamente";
-                return RedirectToAction(nameof(Availables));
+                return View("Availables");
             }
 
         }
