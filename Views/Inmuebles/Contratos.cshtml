@@ -77,14 +77,14 @@
                         @if (item.Valido)
                         {
                             <div>
-                                <i class="fas fa-user-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                                <i class="fas fa-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
                             </div>
                             <div>
-                                <i class="fas fa-user-edit"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
+                                <i class="far fa-credit-card"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
                             </div>
                         }
                         <div>
-                            <i class="fas fa-user"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                            <i class="fas fa-info-circle"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
                         </div>
                         @if (User.IsInRole("Administrador"))
                         {
