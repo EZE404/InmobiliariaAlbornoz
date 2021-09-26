@@ -18,12 +18,14 @@ namespace InmobiliariaAlbornoz.Controllers
         private RepoInmueble repoInmueble;
         private RepoInquilino repoInquilino;
         private RepoContrato repoContrato;
+        private RepoPago repoPago;
         public ContratosController(IConfiguration config)
         {
             this.repo = new RepoContrato(config);
             this.repoInmueble = new RepoInmueble(config);
             this.repoInquilino = new RepoInquilino(config);
             this.repoContrato = new RepoContrato(config);
+            this.repoPago = new RepoPago(config);
         }
 
         // GET: ContratosController
@@ -54,12 +56,13 @@ namespace InmobiliariaAlbornoz.Controllers
                 }
                 else
                 {
-                    TempData[""] = "No se encontró Contrato. Intente nuevamente.";
+                    TempData["msg"] = "No se encontró Contrato. Intente nuevamente.";
                     return RedirectToAction(nameof(Index));
                 }
             }
             catch (Exception)
             {
+                // guardar excepción
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return RedirectToAction(nameof(Index));
             }
@@ -267,6 +270,61 @@ namespace InmobiliariaAlbornoz.Controllers
                 TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        public ActionResult Pagos(int id)
+        {
+            try
+            {
+                var c = repo.Details(id);
+                if (c.Id == 0)
+                {
+                    TempData["msg"] = "No se encontró Contrato.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                IList<Pago> pagos = repoPago.AllByContrato(id);
+                ViewBag.Contrato = c;
+                return View(pagos);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public ActionResult Valids()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetValidsByDates(IFormCollection form)
+        {
+
+            IList<Contrato> contratos;
+
+            try
+            {
+                DateTime desde = DateTime.Parse(form["desde"].ToString());
+                DateTime hasta = DateTime.Parse(form["hasta"].ToString());
+                contratos = repo.ContratosValidsByDates(desde, hasta);
+                return Ok(contratos);
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Ocurió un error. Intente nuevamente";
+                return View("Availables");
+            }
+
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿@model InmobiliariaAlbornoz.ModelsAux.InmuebleAvailableByDates
-
-@{
-    ViewData["Title"] = "Inmuebles disponibles por Fecha";
+﻿@{
+    ViewData["Title"] = "Contratos vigentes por Fecha";
     string hoy = DateTime.Now.ToString("yyyy-MM-dd");
+
 }
 
 @if (TempData["msg"] != null)
@@ -19,32 +18,30 @@
     </div>
 }
 
-<h1>Inmuebles disponibles por Fechas</h1>
+<h1>Contratos vigentes por Fechas</h1>
 
 <hr />
 
 <div class="row">
     <div class="col-sm-12">
-        <p class="lead" id="p_aviso"></p>
+        <p class="lead" id="p_aviso">@DateTime.Now.ToString("dd/MM/yyyy")</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm-3">
-        <label asp-for="Desde" class="form-label"></label>
-        <input type="date" class="form-control" name="desde" id="desde" value="@hoy" min="@hoy"/>
-        <span asp-validation-for="Desde" class="text-danger"></span>
+        <label for="desde" class="form-label">Desde</label>
+        <input type="date" class="form-control" name="desde" id="desde" value="@hoy"/>
     </div>
     <div class="col-sm-3">
-        <label asp-for="Hasta" class="form-label"></label>
-        <input type="date" class="form-control" name="hasta" id="hasta" value="@hoy" min="@hoy"/>
-        <span asp-validation-for="Hasta" class="text-danger"></span>
+        <label for="hasta" class="form-label">Hasta</label>
+        <input type="date" class="form-control" name="hasta" id="hasta" value="@hoy"/>
     </div>
     <div class="col-sm-3 mt-auto">
         <button class="btn btn-primary" id="btn_buscar">Consultar</button>
     </div>
     <div class="cols-sm-3 mt-auto">
-        <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
+        <a class="btn btn-link" asp-action="Index">Lista de Contratos</a>
     </div>
 </div>
 
@@ -55,11 +52,10 @@
         <table class="table" id="table_id">
             <thead>
                 <tr>
-                    <th>Dirección</th>
-                    <th>Tipo</th>
-                    <th>Uso</th>
-                    <th>Amb.</th>
-                    <th>Propietario</th>
+                    <th>Inmuebles</th>
+                    <th>Inquilino</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
                     <th width="70"></th>
                 </tr>
             </thead>
@@ -72,11 +68,11 @@
 <hr />
 
 <div>
-    <a class="btn btn-link" asp-action="Index">Lista de Inmuebles</a>
+    <a class="btn btn-link" asp-action="Index">Lista de Contratos</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DataTable");}
-    <script src="~/js/Inmuebles/Availables/datatable.js"></script>
+    <script src="~/js/Contratos/Valids/datatable.js"></script>
 }

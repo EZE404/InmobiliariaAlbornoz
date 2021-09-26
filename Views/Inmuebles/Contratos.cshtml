@@ -77,19 +77,19 @@
                         @if (item.Valido)
                         {
                             <div>
-                                <i class="fas fa-edit"></i> @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                                <i class="fas fa-edit"></i> <a asp-action="Edit" asp-controller="Contratos" asp-route-id="@item.Id">Editar</a>
                             </div>
                             <div>
-                                <i class="far fa-credit-card"></i> <a asp-controller="Pagos" asp-action="Create" asp-route-id="@item.Id">Pago</a>
+                                <i class="far fa-credit-card"></i> <a asp-controller="Contratos" asp-action="Pagos" asp-route-id="@item.Id">Pagos</a>
                             </div>
                         }
                         <div>
-                            <i class="fas fa-info-circle"></i> @Html.ActionLink("Detalles", "Details", new { id = item.Id })
+                            <i class="fas fa-info-circle"></i> <a asp-action="Details" asp-controller="Contratos" asp-route-id="@item.Id">Detalles</a>
                         </div>
                         @if (User.IsInRole("Administrador"))
                         {
                             <div>
-                                <i class="fas fa-trash-alt"></i> @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                                <i class="fas fa-trash-alt"></i> <a asp-action="Delete" asp-controller="Contratos" asp-route-id="@item.Id">Borrar</a>
                             </div>
                         }
                     </td>

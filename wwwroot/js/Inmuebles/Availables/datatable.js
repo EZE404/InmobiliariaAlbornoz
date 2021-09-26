@@ -4,6 +4,32 @@ const tbody = document.getElementById("tbody");
 const date_desde = document.getElementById("desde");
 const date_hasta = document.getElementById("hasta");
 
+date_hasta.addEventListener("change", (e) => {
+
+    if (new Date(date_desde.value) > new Date(e.target.value)) {
+        p_aviso.innerText = "No puede elegir una fecha final anterior a la fecha de inicio.";
+        btn_buscar.setAttribute("disabled", "disabled");
+        table.clear();
+        table.draw();
+    } else {
+        p_aviso.innerText = "";
+        btn_buscar.removeAttribute("disabled");
+    }
+})
+
+date_desde.addEventListener("change", (e) => {
+
+    if (new Date(e.target.value) > new Date(date_hasta.value)) {
+        p_aviso.innerText = "No puede elegir una fecha de inicio posterior a la fecha final.";
+        btn_buscar.setAttribute("disabled", "disabled");
+        table.clear();
+        table.draw();
+    } else {
+        p_aviso.innerText = "";
+        btn_buscar.removeAttribute("disabled");
+    }
+})
+
 btn_buscar.addEventListener("click", async () => {
 
   let field_desde = new Date(date_desde.value).getTime();
@@ -19,7 +45,7 @@ btn_buscar.addEventListener("click", async () => {
   };
 
   if(field_desde > field_hasta) {
-    p_aviso.innerText = "No puede elegir una fecha de fin anterior a la fecha de inicio";
+    p_aviso.innerText = "No puede elegir una fecha de fin anterior a la fecha de inicio.";
     return;
   }
 
@@ -36,13 +62,13 @@ btn_buscar.addEventListener("click", async () => {
 
     let parsed = await res.json();
 
-
+      if (Object.keys(parsed).length > 0) {
 
     for (i of parsed) {
 
       let propietario = "<a href=\"/Propietarios/Details/" + i.propietario.id + "\" />" + i.propietario.nombre + "</a>";
-      let detalles = "<a href=\"/Inmuebles/Details/" + i.id + "\" /><i class=\"fa fa-info-circle\"></i> Detalles</a>"
-      let contrato = "<a href=\"/Contratos/Create/" + i.id + "\" /><i class=\"fas fa-file-signature\"></i> Contrato</a>"
+        let detalles = "<i class=\"fa fa-info-circle\"></i> <a href=\"/Inmuebles/Details/" + i.id + "\" />Detalles</a>"
+        let contrato = "<i class=\"fas fa-file-signature\"></i> <a href=\"/Contratos/Create/" + i.id + "\" />Contrato</a>"
       let actions = detalles+"<br/>"+contrato;
 
 
@@ -59,9 +85,11 @@ btn_buscar.addEventListener("click", async () => {
     }
 
     table.draw();
-
+      } else {
+          p_aviso.innerText = "No se obtuvieron resultados.";
+      }
   } catch (e) {
-    p_aviso.innerText = "Ocurrió un problema. Intenta nuevamente"
+    p_aviso.innerText = "Ocurrió un problema. Intenta nuevamente."
   }
 
 });

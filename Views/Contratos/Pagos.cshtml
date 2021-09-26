@@ -1,0 +1,97 @@
+﻿@model IEnumerable<InmobiliariaAlbornoz.Models.Pago>
+
+@{
+    ViewData["Title"] = "Pagos de Contrato";
+    Contrato c = (Contrato)ViewBag.Contrato;
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>@TempData["msg"]</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<h3>Pagos de <a asp-action="Details" asp-controller="Contratos" asp-route-id="@c.Id">Contrato @c.Id</a></h3>
+<hr />
+<p>
+    <a class="btn btn-secondary" asp-action="Create" asp-controller="Pagos" asp-route-id="@c.Id"><i class="far fa-plus-square"></i> Cargar Nuevo</a>
+</p>
+<hr />
+<table class="table" id="table_id">
+    <thead>
+        <tr>
+            <th width="40">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th width="100">
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th width="100">
+                @Html.DisplayNameFor(model => model.FechaCorrespondiente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th width="40">
+                @Html.DisplayNameFor(model => model.Anulado)
+            </th>
+            <th width="70"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.FechaCorrespondiente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Monto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.AnuladoNombre)
+                </td>
+                <td>
+                    @if (!item.Anulado)
+                    {
+                        <div>
+                            <i class="fas fa-edit"></i> <a asp-action="Edit" asp-controller="Pagos" asp-route-id="@item.Id">Editar</a>
+                        </div>
+                    }
+                    <div>
+                        <i class="fas fa-info-circle"></i> <a asp-action="Details" asp-controller="Pagos" asp-route-id="@item.Id">Detalles</a>
+                    </div>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <div>
+                            <i class="fas fa-trash-alt"></i> <a asp-action="Delete" asp-controller="Pagos" asp-route-id="@item.Id">Borrar</a>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTable");}
+}

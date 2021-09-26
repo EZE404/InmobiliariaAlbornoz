@@ -33,19 +33,19 @@
             @Html.DisplayNameFor(model => model.IdInmueble)
         </dt>
         <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.IdInmueble)
+            <a asp-action="Details" asp-controller="Inmuebles" asp-route-id="@Model.IdInmueble">Ver Inmueble @Model.IdInmueble</a>
         </dd>
         <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Inmueble.Propietario)
         </dt>
         <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Inmueble.Propietario.Nombre)
+            <a asp-action="Details" asp-controller="Propietarios" asp-route-id="@Model.Inmueble.Propietario.Id">@Model.Inmueble.Propietario.Nombre</a>
         </dd>
         <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Inquilino)
         </dt>
         <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Inquilino.Nombre)
+            <a asp-action="Details" asp-controller="Inquilinos" asp-route-id="@Model.Inquilino.Id">@Model.Inquilino.Nombre</a>
         </dd>
         <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Desde)
@@ -95,6 +95,7 @@
     @if (Model.Valido)
     {
         @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        <a class="btn btn-success" asp-action="Pagos" asp-controller="Contratos" asp-route-id="@Model.Id">Pagos</a>
         <a class="btn btn-warning" asp-controller="Pagos" asp-action="Create" asp-route-id="@Model.Id">Cargar Pago</a>
     }
 </div>

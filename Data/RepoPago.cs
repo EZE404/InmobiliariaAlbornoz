@@ -167,5 +167,51 @@ namespace InmobiliariaAlbornoz.Data
 
             return lista;
         }
+
+        public IList<Pago> AllByContrato(int id)
+        {
+            IList<Pago> lista = new List<Pago>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT p.Id, p.IdContrato, p.Fecha, p.FechaCorrespondiente, 
+                                p.Monto, p.Tipo, p.Anulado FROM pago p 
+                                WHERE p.IdContrato = @id ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Contrato c = new Contrato
+                        {
+                            Id = reader.GetInt32(1),
+                        };
+
+                        Pago p = new Pago
+                        {
+                            Id = reader.GetInt32(0),
+                            IdContrato = reader.GetInt32(1),
+                            Fecha = reader.GetDateTime(2),
+                            FechaCorrespondiente = reader.GetDateTime(3),
+                            Monto = reader.GetDecimal(4),
+                            Tipo = reader.GetString(5),
+                            Anulado = reader.GetBoolean(6),
+                            Contrato = c
+                        };
+
+                        lista.Add(p);
+                    }
+
+                    conn.Close();
+                }
+
+            }
+
+            return lista;
+        }
     }
 }
