@@ -14,12 +14,14 @@ namespace InmobiliariaAlbornoz.Controllers
     [Authorize]
     public class PropietariosController : Controller
     {
-        RepoPropietario repo;
-        RepoInmueble repoInmueble;
+        private RepoPropietario repo;
+        private RepoInmueble repoInmueble;
+        private RepoDev repoDev;
         public PropietariosController(IConfiguration config)
         {
-            repo = new RepoPropietario(config);
-            repoInmueble = new RepoInmueble(config);
+            this.repo = new RepoPropietario(config);
+            this.repoInmueble = new RepoInmueble(config);
+            this.repoDev = new RepoDev(config);
         }
 
         // GET: PropietariosController
@@ -48,8 +50,21 @@ namespace InmobiliariaAlbornoz.Controllers
             }
             catch (Exception e)
             {
-
-                throw e;
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Details:GET", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
 
         }
@@ -92,10 +107,23 @@ namespace InmobiliariaAlbornoz.Controllers
                 TempData["msg"] = "No se cargó Propietario. Intente nuevamente";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
-                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
-                return View();
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Create:POST", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -115,10 +143,23 @@ namespace InmobiliariaAlbornoz.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["msg"] = "Ocurrió un error. intente nuevamente.";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Edit:GET", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -157,10 +198,23 @@ namespace InmobiliariaAlbornoz.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
-                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
-                return RedirectToAction(nameof(Edit), new { id = id });
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Edit:POST", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -181,10 +235,23 @@ namespace InmobiliariaAlbornoz.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["msg"] = "Ocurrió un error. Intente nuevamente.";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Delete:GET", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -215,8 +282,21 @@ namespace InmobiliariaAlbornoz.Controllers
             }
             catch (Exception e)
             {
-                TempData["msg"] = e.Message;
-                return View();
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Delete:POST", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -236,8 +316,21 @@ namespace InmobiliariaAlbornoz.Controllers
             }
             catch (Exception e)
             {
-
-                throw e;
+                try
+                {
+                    string user = "Anónimo";
+                    if (!String.IsNullOrEmpty(User.Identity.Name))
+                    {
+                        user = User.Identity.Name;
+                    }
+                    var res = repoDev.SaveException("Propietarios", "Inmuebles:GET", e.Message, user);
+                    TempData["msg"] = "Ocurrió un error. Intente nuevamente. ID_ERROR: " + res;
+                    return Redirect(Request.Headers["referer"].FirstOrDefault());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
     }
