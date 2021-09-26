@@ -7,4 +7,4 @@
 
 # Falta:
 
-* Informes.
+* Espero que nada. Algún error se escapa siempre.

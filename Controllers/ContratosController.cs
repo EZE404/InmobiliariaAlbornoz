@@ -96,10 +96,23 @@ namespace InmobiliariaAlbornoz.Controllers
         }
 
         // GET: ContratosController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
             try
             {
+                if (id > 0) // Pide crear un contrato par aun inmueble en particular. COntrolar lógica de form en la vista.
+                {
+                    Inmueble inmueble = repoInmueble.ById(id);
+                    if (inmueble.Id == 0)
+                    {
+                        TempData["msg"] = "No se encontró Inmueble. Intente nuevamente.";
+                        return RedirectToAction("Index", "Inmuebles");
+                    }
+                    ViewBag.Inmueble = inmueble;
+                    ViewBag.Inquilinos = repoInquilino.All();
+                    return View();
+                }
+
                 ViewBag.Inmuebles = repoInmueble.AllValid();
                 ViewBag.Inquilinos = repoInquilino.All();
                 return View();

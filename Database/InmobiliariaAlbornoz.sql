@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 23-09-2021 a las 08:32:26
+-- Tiempo de generación: 26-09-2021 a las 22:32:40
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `contrato` (
   PRIMARY KEY (`Id`,`IdInmueble`,`IdInquilino`),
   KEY `fk_inmueble` (`IdInmueble`),
   KEY `fk_inquilino` (`IdInquilino`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `contrato`
@@ -51,7 +51,36 @@ CREATE TABLE IF NOT EXISTS `contrato` (
 INSERT INTO `contrato` (`Id`, `IdInmueble`, `IdInquilino`, `Desde`, `Hasta`, `DniGarante`, `NombreGarante`, `TelefonoGarante`, `EmailGarante`, `Valido`) VALUES
 (8, 4, 4, '2021-08-02', '2023-06-17', '27655489', 'Luis Mercado', '2664101010', 'mario@correo.com', 1),
 (9, 9, 4, '2020-01-23', '2021-09-17', '32452452', 'Mariano Luzza', '234354567', 'mluzza@correo.com', 1),
-(10, 8, 3, '2021-09-07', '2022-06-22', '32452452', 'Mariano Luzza', '234354567', 'mluzza@correo.com', 0);
+(10, 8, 3, '2021-09-07', '2022-06-22', '32452452', 'Mariano Luzza', '234354567', 'mluzza@correo.com', 0),
+(11, 9, 4, '2018-01-23', '2019-09-17', '32452452', 'Mariano Luzza', '234354567', 'mluzza@correo.com', 1),
+(12, 7, 3, '2021-09-26', '2021-09-30', '32452452', 'Mariano Luzza', '266543654', 'mluzza@correo.com', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `error_log`
+--
+
+DROP TABLE IF EXISTS `error_log`;
+CREATE TABLE IF NOT EXISTS `error_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `controller` varchar(56) NOT NULL,
+  `action` varchar(56) NOT NULL,
+  `message` varchar(1024) NOT NULL COMMENT 'detalles de la excepción.',
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'momento de la excepción.',
+  `user` varchar(56) DEFAULT NULL COMMENT 'email del usuario.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='informe de excepciones';
+
+--
+-- Volcado de datos para la tabla `error_log`
+--
+
+INSERT INTO `error_log` (`id`, `controller`, `action`, `message`, `date`, `user`) VALUES
+(1, 'Propietarios', 'Details:GET', 'Unknown column \'Fecha\' in \'field list\'', '2021-09-26 14:29:57', 'Anónimo'),
+(2, 'Contratos', 'Create:GET', 'Unknown column \'Direccion\' in \'field list\'', '2021-09-26 16:19:58', 'eze@correo.com'),
+(3, 'Contratos', 'Create:GET', 'Unknown column \'Direccion\' in \'field list\'', '2021-09-26 16:22:28', 'eze@correo.com'),
+(4, 'Contratos', 'Create:GET', 'Unknown column \'Direccion\' in \'field list\'', '2021-09-26 16:28:55', 'eze@correo.com');
 
 -- --------------------------------------------------------
 
@@ -84,7 +113,6 @@ INSERT INTO `inmueble` (`Id`, `Direccion`, `Tipo`, `Uso`, `Ambientes`, `Precio`,
 (7, 'Chacabuco', 3, 2, 3, '4500000', 1, 1),
 (8, 'Italia', 5, 1, 4, '7800000', 1, 3),
 (9, 'Tomolasta', 2, 2, 2, '6300000', 1, 4),
-(10, 'Sucre 578', 4, 2, 4, '8000000', 1, 4),
 (11, 'Av. Siempre Viva 123', 3, 1, 2, '5000000', 0, 4),
 (12, 'Catamarca 387', 1, 1, 3, '45000000', 0, 3);
 
@@ -113,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `inquilino` (
 
 INSERT INTO `inquilino` (`Id`, `Dni`, `Nombre`, `FechaN`, `DomicilioTrabajo`, `Telefono`, `Email`) VALUES
 (3, '36227971', 'Franco Ezequiel Albornoz', '2021-08-11', 'Under construction', '2664151515', 'eze@correo.com'),
-(4, '30111222', 'Mario Avaca', '2021-09-24', 'sdfdsfasfsd', '2664151515', 'mario@correo.com');
+(4, '30111222', 'Mario Raúl Avaca', '2021-09-24', 'sdfdsfasfsd', '2664151515', 'mario@correo.com');
 
 -- --------------------------------------------------------
 
@@ -170,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `propietario` (
 --
 
 INSERT INTO `propietario` (`Id`, `Dni`, `Nombre`, `FechaN`, `Domicilio`, `Telefono`, `Email`) VALUES
-(1, '36222777', 'Franco Ezequiel', '2021-08-17', 'asdasd', '233423534', 'eze@correo.com'),
+(1, '36222777', 'Franco Ezequiel Albornoz', '2021-08-17', 'asdasd', '2334235345', 'eze@correo.com'),
 (2, '29000567', 'Mario Avaca', '1984-08-16', 'Allá por el faro', '2664151516', 'mario@correo.com'),
 (3, '29666777', 'Genaro Farías', '1975-09-09', 'Aeropuerto', '453425425', 'genaro@mail.com'),
 (4, '41999888', 'Gastón Sosa', '2021-09-09', 'Edesal', '266543654', 'gaston@correo.com');

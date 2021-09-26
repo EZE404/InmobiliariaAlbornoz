@@ -4,6 +4,7 @@
     ViewData["Title"] = "Cargar Contrato";
     IList<Inmueble> Inmuebles = (List<Inmueble>)ViewBag.Inmuebles;
     IList<Inquilino> Inquilinos = (List<Inquilino>)ViewBag.Inquilinos;
+    Inmueble inmueble = (Inmueble)ViewBag.Inmueble;
 }
 
 @if (TempData["msg"] != null)
@@ -20,39 +21,89 @@
     </div>
 }
 
-@if (Inmuebles.Count() == 0 || Inquilinos.Count() == 0)
+
+@if (inmueble == null && Inmuebles.Count == 0)
 {
-    @if (Inmuebles.Count() == 0)
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>No se encontraron Inmuebles en la base de datos.</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    if (Inquilinos.Count == 0)
     {
-        <p class="alert-warning">No hay inmuebles cargados en la Base de Datos</p>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <span>No se Encontraron Inquilinos en la base de datos</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     }
-    @if (Inquilinos.Count() == 0)
-    {
-        <p class="alert-warning">No hay inquilinos cargados en la Base de Datos</p>
-    }
+}
+else if (Inquilinos.Count == 0)
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <span>No se encontraron Inquilinos en la base de datos.</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span><i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <h1>Cargar</h1>
 
-    <h4>Contrato</h4>
+    <h1>Cargar</h1>
+    @if (inmueble == null)
+    {
+        <h4>Contrato</h4>
+    }
+    else
+    {
+        <h4>
+            Contrato para
+            <a asp-action="Details" asp-controller="Inmuebles" asp-route-id="@inmueble.Id">
+                Inmueble @inmueble.Id
+            </a> con dirección en @inmueble.Direccion
+        </h4>
+    }
     <hr />
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="IdInmueble" class="control-label"></label>
-                    <select class="form-control" name="IdInmueble">
-                        @foreach (var i in Inmuebles)
-                        {
-                            <option value="@i.Id">
-                                @(i.Id +" - "+ i.Direccion)
-                            </option>
-                        }
-                    </select>
-                    <span asp-validation-for="IdInmueble" class="text-danger"></span>
-                </div>
+                @if (inmueble == null)
+                {
+                    <div class="form-group">
+                        <label asp-for="IdInmueble" class="control-label"></label>
+                        <select class="form-control" name="IdInmueble">
+                            @foreach (var i in Inmuebles)
+                            {
+                                <option value="@i.Id">
+                                    @(i.Id +" - "+ i.Direccion)
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="IdInmueble" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <input type="hidden" name="IdInmueble" value="@inmueble.Id" />
+                    </div>
+                }
                 <div class="form-group">
                     <label asp-for="IdInquilino" class="control-label"></label>
                     <select class="form-control" name="IdInquilino">
@@ -101,6 +152,7 @@ else
             </form>
         </div>
     </div>
+
 }
 
 <hr />
