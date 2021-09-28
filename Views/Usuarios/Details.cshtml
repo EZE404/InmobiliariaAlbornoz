@@ -63,8 +63,12 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary"})
+
+</div>
 <hr />
 <div>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Lista de Usuarios</a>
+    <a class="btn btn-link" asp-action="Index">Lista de Usuarios</a>
 </div>

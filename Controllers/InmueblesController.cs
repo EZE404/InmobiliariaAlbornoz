@@ -29,11 +29,19 @@ namespace InmobiliariaAlbornoz.Controllers
         }
 
         // GET: Inmueble
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
             try
             {
-                var lista = repo.All();
+                IList<Inmueble> lista;
+                if (id == 1)
+                {
+                    lista = repo.AllAvailables();
+                }
+                else
+                {
+                    lista = repo.All();
+                }
                 return View(lista);
             }
             catch (Exception e)

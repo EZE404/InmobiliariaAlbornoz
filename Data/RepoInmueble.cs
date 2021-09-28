@@ -233,6 +233,53 @@ namespace InmobiliariaAlbornoz.Data
             return list;
         }
 
+        public IList<Inmueble> AllAvailables()
+        {
+            IList<Inmueble> list = new List<Inmueble>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"SELECT i.Id, i.Direccion, i.Tipo, i.Uso, i.Ambientes, i.Precio, i.Disponible, 
+                                i.IdPropietario, p.Nombre, p.Dni, p.Email 
+                                FROM Inmueble i INNER JOIN Propietario p
+                                ON i.IdPropietario = p.Id WHERE i.Disponible = 1 ;";
+
+                using (MySqlCommand comm = new MySqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    var reader = comm.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var i = new Inmueble
+                        {
+                            Id = reader.GetInt32(0),
+                            Direccion = reader.GetString(1),
+                            Tipo = reader.GetInt32(2),
+                            Uso = reader.GetInt32(3),
+                            Ambientes = reader.GetInt32(4),
+                            Precio = reader.GetDecimal(5),
+                            Disponible = reader.GetBoolean(6),
+                            IdPropietario = reader.GetInt32(7),
+                        };
+
+                        var p = new Propietario
+                        {
+                            Id = reader.GetInt32(7),
+                            Nombre = reader.GetString(8),
+                            Dni = reader.GetString(9),
+                            Email = reader.GetString(10),
+                        };
+
+                        i.Propietario = p;
+
+                        list.Add(i);
+                    }
+                    conn.Close();
+                }
+            }
+            return list;
+        }
+
         public IList<Inmueble> AllByInquilino(int id)
         {
             IList<Inmueble> list = new List<Inmueble>();
