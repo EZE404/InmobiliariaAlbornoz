@@ -21,8 +21,8 @@ namespace InmobiliariaAlbornoz.Data
             {
                 string sql = @"UPDATE Contrato
                             SET IdInmueble = @id_inmueble , IdInquilino = @id_inquilino , Desde = @desde , 
-                            Hasta = @hasta , DniGarante = @dni_garante , NombreGarante = @nombre_garante, 
-                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante, Valido = @valido, 
+                            Hasta = @hasta , DniGarante = @dni_garante , NombreGarante = @nombre_garante , 
+                            TelefonoGarante = @tel_garante, EmailGarante = @email_garante, Valido = @valido
                             WHERE Id = @id ;";
 
                 using (MySqlCommand comm = new MySqlCommand(sql, conn))

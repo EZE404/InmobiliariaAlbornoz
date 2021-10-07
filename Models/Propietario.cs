@@ -31,7 +31,7 @@ namespace InmobiliariaAlbornoz.Models
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        [MinLength(10), MaxLength(20)]
+        [MinLength(10, ErrorMessage = "Debe insertar al menos 10 dígitos"), MaxLength(20)]
         [Display(Name = "Teléfono")]
         public string Telefono { get; set; }
 
