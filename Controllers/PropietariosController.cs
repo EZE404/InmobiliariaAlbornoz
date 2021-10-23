@@ -18,13 +18,11 @@ namespace InmobiliariaAlbornoz.Controllers
         private RepoPropietario repo;
         private RepoInmueble repoInmueble;
         private RepoDev repoDev;
-        private InmobiliariaContext dbContext;
-        public PropietariosController(IConfiguration config, InmobiliariaContext dbContext)
+        public PropietariosController(IConfiguration config)
         {
             this.repo = new RepoPropietario(config);
             this.repoInmueble = new RepoInmueble(config);
             this.repoDev = new RepoDev(config);
-            this.dbContext = dbContext;
         }
 
         // GET: PropietariosController
@@ -334,20 +332,6 @@ namespace InmobiliariaAlbornoz.Controllers
                 {
                     throw;
                 }
-            }
-        }
-
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var lista = await dbContext.Propietario.ToListAsync();
-                return Ok(lista);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
             }
         }
     }

@@ -27,6 +27,24 @@ namespace InmobiliariaAlbornoz
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>//el sitio web valida con cookie
+                {
+                    options.LoginPath = "/Usuarios/Login";
+                    options.LogoutPath = "/Usuarios/Logout";
+                    options.AccessDeniedPath = "/Home/Denied";
+                });
+
+            services.AddAuthorization(options =>
+            {
+                //options.AddPolicy("Empleado", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador", "Empleado"));
+                options.AddPolicy("Administrador", policy => policy.RequireRole("Administrador", "SuperAdministrador"));
+            });
+
+            services.AddControllersWithViews();
+
             string connextionString = Configuration.GetConnectionString("databaseMySql");
             // Replace with your server version and type.
             // Use 'MariaDbServerVersion' for MariaDB.
@@ -44,22 +62,6 @@ namespace InmobiliariaAlbornoz
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors()
             );
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>//el sitio web valida con cookie
-                {
-                    options.LoginPath = "/Usuarios/Login";
-                    options.LogoutPath = "/Usuarios/Logout";
-                    options.AccessDeniedPath = "/Home/Denied";
-                });
-
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("Empleado", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador", "Empleado"));
-                options.AddPolicy("Administrador", policy => policy.RequireRole("Administrador", "SuperAdministrador"));
-            });
-
-            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +77,13 @@ namespace InmobiliariaAlbornoz
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Habilitar CORS
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

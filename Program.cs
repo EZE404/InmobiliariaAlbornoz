@@ -18,6 +18,12 @@ namespace InmobiliariaAlbornoz
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();//limpia los proveedores x defecto de log (consola+depuración)
+                    logging.AddConsole();//agrega log de consola
+                                            //logging.AddConfigur(new LoggerConfiguration().WriteTo.File("serilog.txt").CreateLogger())
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
