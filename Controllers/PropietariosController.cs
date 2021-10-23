@@ -3,6 +3,7 @@ using InmobiliariaAlbornoz.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ namespace InmobiliariaAlbornoz.Controllers
         private RepoPropietario repo;
         private RepoInmueble repoInmueble;
         private RepoDev repoDev;
-        public PropietariosController(IConfiguration config)
+        private InmobiliariaContext dbContext;
+        public PropietariosController(IConfiguration config, InmobiliariaContext dbContext)
         {
             this.repo = new RepoPropietario(config);
             this.repoInmueble = new RepoInmueble(config);
             this.repoDev = new RepoDev(config);
+            this.dbContext = dbContext;
         }
 
         // GET: PropietariosController
@@ -331,6 +334,20 @@ namespace InmobiliariaAlbornoz.Controllers
                 {
                     throw;
                 }
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var lista = await dbContext.Propietario.ToListAsync();
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
     }

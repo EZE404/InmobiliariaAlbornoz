@@ -8,6 +8,7 @@ namespace InmobiliariaAlbornoz.Models
 {
     public class Inquilino
     {
+        [Key]
         [Display(Name = "Código")]
         public int Id { get; set; }
 

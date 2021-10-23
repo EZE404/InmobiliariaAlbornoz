@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace InmobiliariaAlbornoz.Models
 {
     public class Contrato
     {
+        [Key]
         [Display(Name  = "Índice")]
         public int Id { get; set; }
 
@@ -32,10 +34,13 @@ namespace InmobiliariaAlbornoz.Models
         [Display(Name = "Válido")]
         public bool Valido { get; set; }
 
+        [NotMapped]
         public string ValidoNombre => Valido ? "Sí" : "No";
 
         //Relaciones
+        [ForeignKey(nameof(IdInmueble))]
         public Inmueble Inmueble { get; set; }
+        [ForeignKey(nameof(IdInquilino))]
         public Inquilino Inquilino { get; set; }
 
         // Garante
