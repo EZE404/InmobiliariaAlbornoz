@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace InmobiliariaAlbornoz.Api
 {
-	[Route("api/[controller]")]
+	[Route("api/[controller]/[action]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	[ApiController]
 	public class PropietariosController : ControllerBase
@@ -26,7 +26,14 @@ namespace InmobiliariaAlbornoz.Api
 			
 		}
         // GET api/<controller>/5
+		
         [HttpGet("{id}")]
-        public IActionResult Get(int id) => Ok(contexto.Usuarios.Find(id));
+		[AllowAnonymous]
+        public IActionResult GetPropietario(int id) => Ok(contexto.Propietario.Find(id));
+
+
+		[HttpGet("{id}")]
+		[AllowAnonymous]
+        public IActionResult GetUsuario(int id) => Ok(contexto.Usuario.Find(id));
 	}
 }

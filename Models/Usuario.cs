@@ -29,6 +29,7 @@ namespace InmobiliariaAlbornoz.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "Campo requerido"), DataType(DataType.Password)]
         public string Clave { get; set; }
+        [Column("AvatarUrl")]
         public string Avatar { get; set; }
         [NotMapped]//Para EF
         [Display(Name ="Imagen de perfil")]

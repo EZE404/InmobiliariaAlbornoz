@@ -13,10 +13,10 @@ namespace InmobiliariaAlbornoz.Data
         {
 
         }
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Propietario> Propietarios { get; set; }
-        public DbSet<Inquilino> Inquilinos { get; set; }
-        public DbSet<Inmueble> Inmuebles { get; set; }
-        public DbSet<Contrato> Contratos { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Propietario> Propietario { get; set; }
+        public DbSet<Inquilino> Inquilino { get; set; }
+        public DbSet<Inmueble> Inmueble { get; set; }
+        public DbSet<Contrato> Contrato { get; set; }
     }
 }

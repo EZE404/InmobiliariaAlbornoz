@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InmobiliariaAlbornoz.Models
 {
@@ -28,6 +29,7 @@ namespace InmobiliariaAlbornoz.Models
         [Required(ErrorMessage = "Campo obligatorio")]
         [MinLength(5)]
         [Display(Name = "Dirección")]
+        [Column("Domicilio")]
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
