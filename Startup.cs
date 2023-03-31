@@ -1,10 +1,14 @@
+using InmobiliariaAlbornoz.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +43,10 @@ namespace InmobiliariaAlbornoz
 						ValidateAudience = true,
 						ValidateLifetime = true,
 						ValidateIssuerSigningKey = true,
-						ValidIssuer = configuration["TokenAuthentication:Issuer"],
-						ValidAudience = configuration["TokenAuthentication:Audience"],
+						ValidIssuer = Configuration["TokenAuthentication:Issuer"],
+						ValidAudience = Configuration["TokenAuthentication:Audience"],
 						IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(
-							configuration["TokenAuthentication:SecretKey"])),
+							Configuration["TokenAuthentication:SecretKey"])),
 					};
 
                    options.Events = new JwtBearerEvents
@@ -71,8 +75,8 @@ namespace InmobiliariaAlbornoz
             /* PARA MySql - usando Pomelo */
 			services.AddDbContext<DataContext>(
 				options => options.UseMySql(
-					configuration["ConnectionStrings:databaseMySql"],
-					ServerVersion.AutoDetect(configuration["ConnectionStrings:databaseMySql"])
+					Configuration["ConnectionStrings:databaseMySql"],
+					ServerVersion.AutoDetect(Configuration["ConnectionStrings:databaseMySql"])
 				)
 			);
         }

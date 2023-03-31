@@ -1,3 +1,13 @@
+using InmobiliariaAlbornoz.Data;
+using InmobiliariaAlbornoz.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading.Tasks;
+
 namespace InmobiliariaAlbornoz.Api
 {
 	[Route("api/[controller]")]
@@ -15,22 +25,8 @@ namespace InmobiliariaAlbornoz.Api
 			this.config = config;
 			
 		}
-		// GET: api/<controller>
-		[HttpGet] //obtener todos los propietarios
-		public async Task<ActionResult<Propietario>> Get()
-		{
-			try
-			{
-				
-				var usuario =  User.Identity.Name;
-				var prop = await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
-				//var propView = new PropietarioView(prop);
-				return Ok(prop);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-    }
+        // GET api/<controller>/5
+        [HttpGet("{id}")]
+        public IActionResult Get(int id) => Ok(contexto.Usuarios.Find(id));
+	}
 }
