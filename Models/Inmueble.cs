@@ -9,7 +9,7 @@ namespace InmobiliariaAlbornoz.Models
     public enum enTipos
     {
         Local = 1,
-        Depósito = 2,
+        DepÃ³sito = 2,
         Casa = 3,
         Depto = 4,
         Otros = 5
@@ -23,12 +23,12 @@ namespace InmobiliariaAlbornoz.Models
 
     public class Inmueble
     {
-        [Display(Name = "Código")]
+        [Display(Name = "CÃ³digo")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [MinLength(5)]
-        [Display(Name = "Dirección")]
+        [Display(Name = "DirecciÃ³n")]
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
@@ -44,14 +44,14 @@ namespace InmobiliariaAlbornoz.Models
         public string UsoNombre => Uso > 0 ? ((enUsos)Uso).ToString() : "";
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        [Display(Name = "N° Ambientes")]
+        [Display(Name = "Nï¿½ Ambientes")]
         public int Ambientes { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         public decimal Precio { get; set; }
 
         public bool Disponible { get; set; }
-        public string DisponibleNombre => Disponible ? "Sí" : "No";
+        public string DisponibleNombre => Disponible ? "Sï¿½" : "No";
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Propietario")]

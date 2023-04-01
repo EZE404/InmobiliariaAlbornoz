@@ -41,5 +41,8 @@ namespace InmobiliariaAlbornoz.Models
         [DataType(DataType.EmailAddress)]
         [MinLength(5)]
         public string Email { get; set; }
+
+        [Required, DataType(DataType.Password)]
+        public string Clave { get; set; }
     }
 }
