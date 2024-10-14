@@ -1,0 +1,12 @@
+## Proyecto web de una Inmobiliaria para la materia de .NET (5) en ULP
+![Inicio](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174150_localhost.jpeg)
+![Login](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174211_localhost.jpeg)
+![Editar Cuenta](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174246_localhost.jpeg)
+![Usuarios](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174316_localhost.jpeg)
+![Propietarios](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174333_localhost.jpeg)
+![Inquilinos](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174344_localhost.jpeg)
+![Inmuebles](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174356_localhost.jpeg)
+![Inmuebles disponibles por fecha](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174439_localhost.jpeg)
+![Contratos](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174450_localhost.jpeg)
+![Contratos vigenes por fecha](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_174458_localhost.jpeg)
+![Pagos](https://github.com/EZE404/InmobiliariaAlbornoz/blob/master/Captura%20de%20pantalla_14-10-2024_17458_localhost.jpeg)
