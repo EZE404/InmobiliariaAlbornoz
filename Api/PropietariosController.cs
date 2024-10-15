@@ -77,6 +77,36 @@ namespace InmobiliariaAlbornoz.Api
 			}
 		}
 
+		// GET: api/<controller>/getpropietario						// Ok
+		[HttpGet]
+		public async Task<ActionResult<Propietario>> GetPropietario()	
+		{
+			try
+			{
+				var usuario = User.Identity.Name;
+				Propietario prop = await contexto.Propietario.SingleOrDefaultAsync(x => x.Email == usuario);
+				return Ok(prop);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex);
+			}
+		}
+		
+        // GET api/<controller>/GetAll
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                return Ok(await contexto.Propietario.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
 		[AllowAnonymous]
         public IActionResult GetPropietario(int id) => Ok(contexto.Propietario.Find(id));

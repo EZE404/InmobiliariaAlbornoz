@@ -21,6 +21,10 @@ namespace InmobiliariaAlbornoz.Models
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
+        [MinLength(3)]
+        public string Apellido { get; set; }
+
+        [Required(ErrorMessage = "Campo obligatorio")]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Nacimiento")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
@@ -44,5 +48,7 @@ namespace InmobiliariaAlbornoz.Models
 
         [Required, DataType(DataType.Password)]
         public string Clave { get; set; }
+
+        public string AvatarUrl { get; set; }
     }
 }
