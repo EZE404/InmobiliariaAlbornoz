@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace InmobiliariaAlbornoz.Models
 {
@@ -44,20 +46,23 @@ namespace InmobiliariaAlbornoz.Models
         public string UsoNombre => Uso > 0 ? ((enUsos)Uso).ToString() : "";
 
         [Required(ErrorMessage = "Campo obligatorio")]
-        [Display(Name = "N� Ambientes")]
+        [Display(Name = "Num. Ambientes")]
         public int Ambientes { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]
         public decimal Precio { get; set; }
 
         public bool Disponible { get; set; }
-        public string DisponibleNombre => Disponible ? "S�" : "No";
+        public string DisponibleNombre => Disponible ? "Sí" : "No";
 
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Propietario")]
         public int IdPropietario { get; set; }
 
+        [ForeignKey("IdPropietario")]
         public Propietario Propietario { get; set; }
+
+        public string ImageUrl { get; set; }
 
         public static IDictionary<int, string> ObtenerTipos()
         {

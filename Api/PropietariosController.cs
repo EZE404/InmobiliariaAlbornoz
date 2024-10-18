@@ -1,5 +1,6 @@
 using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
+using InmobiliariaAlbornoz.ModelsAux;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -56,6 +57,7 @@ namespace InmobiliariaAlbornoz.Api
 					var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 					var claims = new List<Claim>
 					{
+						//new Claim("Id", p.Id),
 						new Claim(ClaimTypes.Name, p.Email),
 						new Claim("FullName", p.Nombre),
 						new Claim(ClaimTypes.Role, "Propietario"),
@@ -92,7 +94,105 @@ namespace InmobiliariaAlbornoz.Api
 				return BadRequest(ex);
 			}
 		}
-		
+
+		[HttpPut]
+		public async Task<IActionResult> ActualizarPropietario([FromBody] PropietarioPutDto propietario)
+		{
+			try
+			{
+				if (propietario == null)
+				{
+					return BadRequest("Propietario inválido.");
+				}
+
+				// Obtener el email del usuario autenticado desde el token JWT
+				var emailUsuarioLogueado = User.Identity.Name;  // Este es el email del usuario en el token
+
+				// Buscar el propietario a actualizar en la base de datos
+				var propietarioExistente = await contexto.Propietario.SingleOrDefaultAsync(x => x.Email == emailUsuarioLogueado);
+				if (propietarioExistente == null)
+				{
+					return NotFound("Propietario no encontrado.");
+				}
+
+				// Validar que el propietario autenticado es el mismo que está intentando actualizar su información
+				if (propietarioExistente.Email != emailUsuarioLogueado)
+				{
+					return Forbid("No tienes permisos para actualizar este propietario.");
+				}
+
+				propietarioExistente.Dni = propietario.Dni;
+				propietarioExistente.Nombre = propietario.Nombre;
+				propietarioExistente.Apellido = propietario.Apellido;
+				propietarioExistente.Email = propietario.Email;
+				propietarioExistente.Telefono = propietario.Telefono;
+				propietarioExistente.FechaN = propietario.FechaN;
+				propietarioExistente.Direccion = propietario.Direccion;
+
+				// Guardar los cambios
+				contexto.Propietario.Update(propietarioExistente);
+				await contexto.SaveChangesAsync();
+
+				return Ok(propietarioExistente);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpPut]
+		public async Task<IActionResult> ActualizarClave([FromForm] string currentpass, [FromForm] string newpass)
+		{
+			try
+			{
+				// Obtener el email del usuario autenticado desde el token JWT
+				var emailUsuarioLogueado = User.Identity.Name; // Este es el email del usuario en el token
+
+				// Buscar el propietario a actualizar en la base de datos
+				var propietarioExistente = await contexto.Propietario.SingleOrDefaultAsync(x => x.Email == emailUsuarioLogueado);
+				if (propietarioExistente == null)
+				{
+					return NotFound("Propietario no encontrado.");
+				}
+
+				// Validar la contraseña actual
+				var currentFromBodyHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+					password: currentpass,
+					salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+					prf: KeyDerivationPrf.HMACSHA1,
+					iterationCount: 1000,
+					numBytesRequested: 256 / 8));
+
+				if (currentFromBodyHashed != propietarioExistente.Clave)
+				{
+					return BadRequest("La contraseña actual es incorrecta.");
+				}
+
+				// Hashear la nueva contraseña
+				var newPassHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+					password: newpass,
+					salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+					prf: KeyDerivationPrf.HMACSHA1,
+					iterationCount: 1000,
+					numBytesRequested: 256 / 8));
+
+				// Actualizar la contraseña
+				propietarioExistente.Clave = newPassHashed;
+
+				// Guardar los cambios
+				contexto.Propietario.Update(propietarioExistente);
+				await contexto.SaveChangesAsync();
+
+				return Ok("Contraseña actualizada correctamente.");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest($"Error: {ex.Message}");
+			}
+		}
+
+
         // GET api/<controller>/GetAll
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
