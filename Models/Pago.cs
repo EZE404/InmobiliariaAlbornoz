@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace InmobiliariaAlbornoz.Models
         [Key]
         [Display (Name = "Código")]
         public int Id { get; set; }
-
+        public int Numero { get; set; }
         [Required(ErrorMessage = "El contrato es necesario"), Display (Name ="Contrato")]
         public int IdContrato { get; set; }
 
@@ -36,6 +37,8 @@ namespace InmobiliariaAlbornoz.Models
 
         public bool Anulado { get; set; }
         public string AnuladoNombre => Anulado ? "Sí" : "No";
+
+        [ForeignKey("IdContrato")]
         public Contrato Contrato { get; set; }
     }
 }

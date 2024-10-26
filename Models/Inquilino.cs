@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,7 @@ namespace InmobiliariaAlbornoz.Models
         [Required(ErrorMessage = "Campo obligatorio")]
         [Display(Name = "Dirección de Trabajo")]
         [MinLength(5)]
+        [Column("DomicilioTrabajo")]
         public string DireccionTrabajo { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio")]

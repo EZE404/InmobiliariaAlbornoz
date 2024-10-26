@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,13 +30,18 @@ namespace InmobiliariaAlbornoz.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime Hasta { get; set; }
 
+        [Required(ErrorMessage = "Campo obligatorio")]
+        public decimal Monto { get; set; }
+
         [Display(Name = "Válido")]
         public bool Valido { get; set; }
 
         public string ValidoNombre => Valido ? "Sí" : "No";
 
         //Relaciones
+        [ForeignKey("IdInmueble")]
         public Inmueble Inmueble { get; set; }
+        [ForeignKey("IdInquilino")]
         public Inquilino Inquilino { get; set; }
 
         // Garante

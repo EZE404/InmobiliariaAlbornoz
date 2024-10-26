@@ -58,16 +58,16 @@ namespace InmobiliariaAlbornoz.Api
 					var claims = new List<Claim>
 					{
 						//new Claim("Id", p.Id),
-						new Claim(ClaimTypes.Name, p.Email),
-						new Claim("FullName", p.Nombre),
-						new Claim(ClaimTypes.Role, "Propietario"),
+						new(ClaimTypes.Name, p.Email),
+						new("FullName", p.Nombre),
+						new(ClaimTypes.Role, "Propietario"),
 					};
 
 					var token = new JwtSecurityToken(
 						issuer: config["TokenAuthentication:Issuer"],
 						audience: config["TokenAuthentication:Audience"],
 						claims: claims,
-						expires: DateTime.Now.AddMinutes(60),
+						expires: DateTime.Now.AddMinutes(180),
 						signingCredentials: credenciales
 					);
 					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
