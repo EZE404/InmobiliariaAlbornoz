@@ -1,4 +1,6 @@
 using InmobiliariaAlbornoz.Data;
+using InmobiliariaAlbornoz.Models;
+using InmobiliariaAlbornoz.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -79,6 +81,10 @@ namespace InmobiliariaAlbornoz
 					ServerVersion.AutoDetect(Configuration["ConnectionStrings:databaseMySql"])
 				)
 			);
+            // Esto es para que la instancia de EmailSettings se complete desde la configuración (están en user secrets)
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            // Inyección de dependencia EmailService
+            services.AddTransient<EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
