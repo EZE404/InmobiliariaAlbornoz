@@ -1,17 +1,13 @@
 using InmobiliariaAlbornoz.Data;
 using InmobiliariaAlbornoz.Models;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;

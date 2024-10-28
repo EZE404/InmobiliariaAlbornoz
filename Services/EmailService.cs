@@ -48,17 +48,21 @@ namespace InmobiliariaAlbornoz.Services
             </html>"
             };*/
 
-            // Cuerpo del mensaje en HTML para un botón con el token de restablecimiento de contraseña
+            // Cuerpo del mensaje en HTML para el token de restablecimiento de contraseña
             var bodyBuilder = new BodyBuilder
             {
-                HtmlBody = $@"
-            <html>
-                <body>
-                    <p>Para generar una nueva contraseña, utilice el siguiente token en su aplicación:</p>
-                    <p>{resetLink}</p>
-                    <p>Si no solicitó este cambio, ignore este correo.</p>
-                </body>
-            </html>"
+            HtmlBody = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif; color: #333;'>
+                        <p>Para generar una nueva contraseña, utilice el siguiente token en su aplicación:</p>
+                        
+                        <div style='padding: 10px; background-color: #f2f2f2; border-radius: 5px; border: 1px solid #ddd; max-width: 300px; word-wrap: break-word;'>
+                            <p style='font-size: 18px; font-weight: bold; color: #333; text-align: center; margin: 0;'>{resetLink}</p>
+                        </div>
+                        
+                        <p style='margin-top: 20px;'>Si no solicitó este cambio, ignore este correo.</p>
+                    </body>
+                </html>"
             };
 
             message.Body = bodyBuilder.ToMessageBody();
